@@ -18,7 +18,6 @@ For now, you need [to have Go installed](https://golang.org/doc/install) to use 
 
 ## Todos
 
-- Automatically publish Github releases using Jenkins
 - Write tests
 - Create a more flexible system for themes
 - Make the README a bit more sexy
