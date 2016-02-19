@@ -6,15 +6,21 @@ This a program that parses exported Postman collections to generate HTTP API doc
 
 ## Usage
 
-For now, you need [to have Go installed](https://golang.org/doc/install) to use it.
-
-- Get the package with go get `go get github.com/aubm/postmanerator`
-- Install it `go install`
-- Use it `postmanerator -theme='bootstrap_default' -output='./doc.html' /path/to/your/collection.postman.json`
+`postmanerator -theme='bootstrap_default' -output='./doc.html' /path/to/your/collection.postman.json`
 
 ## Features
 
 - Custom themes
+
+## Installation
+
+Just download the latest appropriate [release on Github](https://github.com/aubm/postmanerator/releases).
+
+Or install it from sources ...
+
+- Follow the instructions to [get golang installed](https://golang.org/doc/install) on your machine
+- Get the package with go get `go get github.com/aubm/postmanerator`
+- Install it `go install`
 
 ## Todos
 
