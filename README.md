@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aubm/postmanerator.svg?branch=master)](https://travis-ci.org/aubm/postmanerator)
+
 ## What is it ?
 
 This a program that parses exported Postman collections to generate HTTP API documentations.
