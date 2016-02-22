@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"text/template"
-
-	"fmt"
 
 	"github.com/aubm/postmanerator/postman"
 	"github.com/russross/blackfriday"
@@ -52,7 +52,7 @@ func main() {
 
 func checkErr(err error) {
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
