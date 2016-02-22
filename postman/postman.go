@@ -7,7 +7,7 @@ type Collection struct {
 	Order       []string  `json:"order"`
 	Folders     []Folder  `json:"folders"`
 	Timestamp   int       `json:"timestamp"`
-	Owner       int       `json:"owner"`
+	Owner       string    `json:"owner"`
 	RemoteLink  string    `json:"remoteLink"`
 	Public      bool      `json:"public"`
 	Requests    []Request `json:"requests"`
@@ -18,7 +18,7 @@ type Folder struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Order       []string `json:"order"`
-	Owner       int      `json:"owner"`
+	Owner       string   `json:"owner"`
 }
 
 type Request struct {
@@ -34,7 +34,7 @@ type Request struct {
 	Tests            string        `json:"tests"`
 	CurrentHelper    string        `json:"currentHelper"`
 	HelperAttributes interface{}   `json:"helperAttributes"`
-	Time             int           `json:"time"`
+	Time             string        `json:"time"`
 	Name             string        `json:"name"`
 	Description      string        `json:"description"`
 	CollectionID     string        `json:"collectionId"`
@@ -49,7 +49,7 @@ type Response struct {
 		Name   string `json:"name"`
 		Detail string `json:"detail"`
 	} `json:"responseCode"`
-	Time    int `json:"time"`
+	Time    string `json:"time"`
 	Headers []struct {
 		Name        string `json:"name"`
 		Key         string `json:"key"`
@@ -60,12 +60,12 @@ type Response struct {
 	Mime        string        `json:"mime"`
 	Text        string        `json:"text"`
 	Language    string        `json:"language"`
-	RawDataType string        `json:"text"`
+	RawDataType string        `json:"rawDataType"`
 	State       struct {
 		Size string `json:"size"`
 	} `json:"state"`
 	PreviewType            string `json:"previewType"`
-	SearchResultScrolledTo int    `json:"searchResultScrolledTo"`
+	SearchResultScrolledTo string `json:"searchResultScrolledTo"`
 	ForceNoPretty          bool   `json:"forceNoPretty"`
 	Write                  bool   `json:"write"`
 	Empty                  bool   `json:"empty"`
