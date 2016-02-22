@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -80,6 +81,12 @@ func getFuncMap() template.FuncMap {
 		},
 		"randomID": func() int {
 			return rand.Intn(999999999)
+		},
+		"indentJSON": func(input string) (string, error) {
+			dest := new(bytes.Buffer)
+			src := []byte(input)
+			err := json.Indent(dest, src, "", "    ")
+			return dest.String(), err
 		},
 	}
 }

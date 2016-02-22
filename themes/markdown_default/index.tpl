@@ -35,11 +35,11 @@
     <tr><th>Status</th><td>{{ $res.ResponseCode.Name }}</td></tr>
 </table>
 
-{{ with $example := $res.Request.Data }}
+{{ with $example := $res.Text }}
 **Example** :
 
 ```
-{{ $example }}
+{{ indentJSON $example }}
 ```
 {{ end }}
 

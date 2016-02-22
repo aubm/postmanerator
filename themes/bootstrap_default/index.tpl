@@ -65,11 +65,11 @@
                     <tr><th style="width: 20%;">Status</th><td>{{ $res.ResponseCode.Name }}</td></tr>
                 </table>
 
-                {{ with $example := $res.Request.Data }}
+                {{ with $example := $res.Text }}
                     {{ $exampleID := randomID }}
                     <button class="btn btn-default" onclick="showOrHideBlock('example_{{$exampleID}}')">Show example</button>
 
-                    <pre id="example_{{$exampleID}}" style="display:none;"><code>{{ $example }}</code></pre>
+                    <pre id="example_{{$exampleID}}" style="display:none;"><code>{{ indentJSON $example }}</code></pre>
                 {{ end }}
 
             {{ end }}
