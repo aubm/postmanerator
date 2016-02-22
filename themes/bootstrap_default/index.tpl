@@ -42,7 +42,7 @@
 
     {{ range .Order }}
 
-        {{ with $req := findRequest . }}
+        {{ with $req := findRequest $.Requests . }}
         <div class="request">
 
             <h4>{{ $req.Name }}</h4>

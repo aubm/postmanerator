@@ -13,7 +13,7 @@
 
 {{ range .Order }}
 
-{{ with $req := findRequest . }}
+{{ with $req := findRequest $.Requests . }}
 
 ### {{ $req.Name }}
 

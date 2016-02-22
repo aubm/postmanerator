@@ -39,17 +39,34 @@ func main() {
 		defer out.Close()
 	}
 
-	// Get Postman collection
-	col = new(postman.Collection)
-	buf, err := ioutil.ReadFile(args[0])
+	col, err := collectionFromFile(args[0])
 	checkErr(err)
 
-	err = json.Unmarshal(buf, col)
-	checkErr(err)
-
-	templates := template.Must(template.New("").Funcs(getFuncMap()).ParseGlob(fmt.Sprintf("./themes/%v/index.tpl", *theme)))
+	templates := template.Must(template.New("").Funcs(template.FuncMap{
+		"findRequest":  findRequest,
+		"findResponse": findResponse,
+		"markdown":     markdown,
+		"randomID":     randomID,
+		"indentJSON":   indentJSON,
+	}).ParseGlob(fmt.Sprintf("./themes/%v/index.tpl", *theme)))
 	err = templates.ExecuteTemplate(out, "index.tpl", *col)
 	checkErr(err)
+}
+
+func collectionFromFile(file string) (*postman.Collection, error) {
+	col = new(postman.Collection)
+
+	buf, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(buf, col)
+	if err != nil {
+		return nil, err
+	}
+
+	return col, nil
 }
 
 func checkErr(err error) {
@@ -58,35 +75,35 @@ func checkErr(err error) {
 	}
 }
 
-func getFuncMap() template.FuncMap {
-	return template.FuncMap{
-		"findRequest": func(ID string) (postman.Request, error) {
-			for _, r := range col.Requests {
-				if r.ID == ID {
-					return r, nil
-				}
-			}
-			return postman.Request{}, errors.New("request not found")
-		},
-		"findResponse": func(req postman.Request, name string) (postman.Response, error) {
-			for _, res := range req.Responses {
-				if res.Name == name {
-					return res, nil
-				}
-			}
-			return postman.Response{}, errors.New("response not found")
-		},
-		"markdown": func(input string) string {
-			return string(blackfriday.MarkdownBasic([]byte(input)))
-		},
-		"randomID": func() int {
-			return rand.Intn(999999999)
-		},
-		"indentJSON": func(input string) (string, error) {
-			dest := new(bytes.Buffer)
-			src := []byte(input)
-			err := json.Indent(dest, src, "", "    ")
-			return dest.String(), err
-		},
+func findRequest(requests []postman.Request, ID string) (postman.Request, error) {
+	for _, r := range requests {
+		if r.ID == ID {
+			return r, nil
+		}
 	}
+	return postman.Request{}, errors.New("request not found")
+}
+
+func findResponse(req postman.Request, name string) (postman.Response, error) {
+	for _, res := range req.Responses {
+		if res.Name == name {
+			return res, nil
+		}
+	}
+	return postman.Response{}, errors.New("response not found")
+}
+
+func markdown(input string) string {
+	return string(blackfriday.MarkdownBasic([]byte(input)))
+}
+
+func randomID() int {
+	return rand.Intn(999999999)
+}
+
+func indentJSON(input string) (string, error) {
+	dest := new(bytes.Buffer)
+	src := []byte(input)
+	err := json.Indent(dest, src, "", "    ")
+	return dest.String(), err
 }
