@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"text/template"
 
@@ -76,6 +77,9 @@ func getFuncMap() template.FuncMap {
 		},
 		"markdown": func(input string) string {
 			return string(blackfriday.MarkdownBasic([]byte(input)))
+		},
+		"randomID": func() int {
+			return rand.Intn(999999999)
 		},
 	}
 }
