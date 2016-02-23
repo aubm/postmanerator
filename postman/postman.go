@@ -1,24 +1,24 @@
 package postman
 
 type Collection struct {
-	Id          string    `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Order       []string  `json:"order"`
-	Folders     []Folder  `json:"folders"`
-	Timestamp   int       `json:"timestamp"`
-	Owner       string    `json:"owner"`
-	RemoteLink  string    `json:"remoteLink"`
-	Public      bool      `json:"public"`
-	Requests    []Request `json:"requests"`
+	Id          string      `json:"id"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Order       []string    `json:"order"`
+	Folders     []Folder    `json:"folders"`
+	Timestamp   int         `json:"timestamp"`
+	Owner       interface{} `json:"owner"`
+	RemoteLink  string      `json:"remoteLink"`
+	Public      bool        `json:"public"`
+	Requests    []Request   `json:"requests"`
 }
 
 type Folder struct {
-	Id          string   `json:"id"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Order       []string `json:"order"`
-	Owner       string   `json:"owner"`
+	Id          string      `json:"id"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Order       []string    `json:"order"`
+	Owner       interface{} `json:"owner"`
 }
 
 type Request struct {
@@ -34,7 +34,7 @@ type Request struct {
 	Tests            string        `json:"tests"`
 	CurrentHelper    string        `json:"currentHelper"`
 	HelperAttributes interface{}   `json:"helperAttributes"`
-	Time             string        `json:"time"`
+	Time             interface{}   `json:"time"`
 	Name             string        `json:"name"`
 	Description      string        `json:"description"`
 	CollectionID     string        `json:"collectionId"`
@@ -49,7 +49,7 @@ type Response struct {
 		Name   string `json:"name"`
 		Detail string `json:"detail"`
 	} `json:"responseCode"`
-	Time    string `json:"time"`
+	Time    interface{} `json:"time"`
 	Headers []struct {
 		Name        string `json:"name"`
 		Key         string `json:"key"`
@@ -64,17 +64,17 @@ type Response struct {
 	State       struct {
 		Size string `json:"size"`
 	} `json:"state"`
-	PreviewType            string `json:"previewType"`
-	SearchResultScrolledTo string `json:"searchResultScrolledTo"`
-	ForceNoPretty          bool   `json:"forceNoPretty"`
-	Write                  bool   `json:"write"`
-	Empty                  bool   `json:"empty"`
-	Failed                 bool   `json:"failed"`
-	IsSample               bool   `json:"isSample"`
-	ScrollToResult         bool   `json:"scrollToResult"`
-	RunTests               bool   `json:"runTests"`
-	ID                     string `json:"id"`
-	Name                   string `json:"name"`
+	PreviewType            string      `json:"previewType"`
+	SearchResultScrolledTo interface{} `json:"searchResultScrolledTo"`
+	ForceNoPretty          bool        `json:"forceNoPretty"`
+	Write                  bool        `json:"write"`
+	Empty                  bool        `json:"empty"`
+	Failed                 bool        `json:"failed"`
+	IsSample               bool        `json:"isSample"`
+	ScrollToResult         bool        `json:"scrollToResult"`
+	RunTests               bool        `json:"runTests"`
+	ID                     string      `json:"id"`
+	Name                   string      `json:"name"`
 	Request                struct {
 		URL     string `json:"url"`
 		Headers []struct {

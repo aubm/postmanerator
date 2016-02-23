@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"reflect"
 	"testing"
 
@@ -16,22 +15,18 @@ func TestFindRequest(t *testing.T) {
 
 	cases := []struct {
 		in  string
-		req postman.Request
-		err error
+		req *postman.Request
 	}{
-		{"azerty", requests[0], nil},
-		{"foo", postman.Request{}, errors.New("request not found")},
-		{"querty", requests[1], nil},
-		{"bar", postman.Request{}, errors.New("request not found")},
+		{"azerty", &requests[0]},
+		{"foo", nil},
+		{"querty", &requests[1]},
+		{"bar", nil},
 	}
 
 	for i := 0; i < len(cases); i++ {
-		req, err := findRequest(requests, cases[i].in)
+		req := findRequest(requests, cases[i].in)
 		if !reflect.DeepEqual(req, cases[i].req) {
 			t.Errorf("when req id = %v, expected req to equal %v, got %v", cases[i].in, cases[i].req, req)
-		}
-		if !reflect.DeepEqual(err, cases[i].err) {
-			t.Errorf("when req id = %v, expected err to equal %v, got %v", cases[i].in, cases[i].err, err)
 		}
 	}
 }

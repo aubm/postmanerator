@@ -75,22 +75,22 @@ func checkErr(err error) {
 	}
 }
 
-func findRequest(requests []postman.Request, ID string) (postman.Request, error) {
+func findRequest(requests []postman.Request, ID string) *postman.Request {
 	for _, r := range requests {
 		if r.ID == ID {
-			return r, nil
+			return &r
 		}
 	}
-	return postman.Request{}, errors.New("request not found")
+	return nil
 }
 
-func findResponse(req postman.Request, name string) (postman.Response, error) {
+func findResponse(req postman.Request, name string) *postman.Response {
 	for _, res := range req.Responses {
 		if res.Name == name {
-			return res, nil
+			return &res
 		}
 	}
-	return postman.Response{}, errors.New("response not found")
+	return nil
 }
 
 func markdown(input string) string {
