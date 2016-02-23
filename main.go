@@ -6,7 +6,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -15,8 +14,6 @@ import (
 	"github.com/aubm/postmanerator/postman"
 	"github.com/russross/blackfriday"
 )
-
-var col *postman.Collection
 
 var theme = flag.String("theme", "markdown_default", "the theme to use")
 var outputFile = flag.String("output", "", "the output file, default is stdout")
@@ -39,8 +36,10 @@ func main() {
 		defer out.Close()
 	}
 
-	col, err := collectionFromFile(args[0])
+	col, err := postman.CollectionFromFile(args[0])
 	checkErr(err)
+
+	col.ExtractStructuresDefinition()
 
 	templates := template.Must(template.New("").Funcs(template.FuncMap{
 		"findRequest":  findRequest,
@@ -51,22 +50,6 @@ func main() {
 	}).ParseGlob(fmt.Sprintf("./themes/%v/index.tpl", *theme)))
 	err = templates.ExecuteTemplate(out, "index.tpl", *col)
 	checkErr(err)
-}
-
-func collectionFromFile(file string) (*postman.Collection, error) {
-	col = new(postman.Collection)
-
-	buf, err := ioutil.ReadFile(file)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(buf, col)
-	if err != nil {
-		return nil, err
-	}
-
-	return col, nil
 }
 
 func checkErr(err error) {

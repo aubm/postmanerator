@@ -1,5 +1,10 @@
 package postman
 
+import (
+	"encoding/json"
+	"io/ioutil"
+)
+
 type Collection struct {
 	Id          string      `json:"id"`
 	Name        string      `json:"name"`
@@ -11,6 +16,7 @@ type Collection struct {
 	RemoteLink  string      `json:"remoteLink"`
 	Public      bool        `json:"public"`
 	Requests    []Request   `json:"requests"`
+	Structures  []StructureDefinition
 }
 
 type Folder struct {
@@ -87,4 +93,21 @@ type Response struct {
 		Method   string `json:"method"`
 		DataMode string `json:"dataMode"`
 	} `json:"request"`
+}
+
+// CollectionFromFile parses the content of a file and in a new collection
+func CollectionFromFile(file string) (*Collection, error) {
+	col := new(Collection)
+
+	buf, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(buf, col)
+	if err != nil {
+		return nil, err
+	}
+
+	return col, nil
 }
