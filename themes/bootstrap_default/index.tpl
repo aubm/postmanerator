@@ -32,6 +32,29 @@
 
 {{ markdown .Description }}
 
+{{ with $structures := .Structures }}
+<h2>API structures</h2>
+
+{{ range $structures }}
+
+    <h3>{{ .Name }}</h3>
+
+    <p>{{ .Description }}</p>
+
+    <table class="table table-bordered">
+    {{ range .Fields }}
+        <tr>
+            <th>{{ .Name }}</th>
+            <td>{{ .Type }}</td>
+            <td>{{ .Description }}</td>
+        </tr>
+    {{ end }}
+    </table>
+
+{{ end }}
+
+{{ end }}
+
 <h2>API details</h2>
 
 {{ range .Folders }}

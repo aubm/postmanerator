@@ -4,6 +4,30 @@
 
 {{ .Description }}
 
+{{ with $structures := .Structures }}
+
+## API structures
+
+{{ range $structures }}
+
+### {{ .Name }}
+
+{{ .Description }}
+
+<table class="table table-bordered">
+{{ range .Fields }}
+<tr>
+    <th>{{ .Name }}</th>
+    <td>{{ .Type }}</td>
+    <td>{{ .Description }}</td>
+</tr>
+{{ end }}
+</table>
+
+{{ end }}
+
+{{ end }}
+
 ## API Details
 
 {{ range .Folders }}
