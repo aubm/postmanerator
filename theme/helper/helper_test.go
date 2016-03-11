@@ -30,3 +30,22 @@ func TestFindRequest(t *testing.T) {
 		}
 	}
 }
+
+func TestCurlSnippet(t *testing.T) {
+	requests := []postman.Request{
+		{RawHeaders: "Content-Type: application/json\nAccept: */*\n", URL: "http://{{domain}}/api/items",
+			Method: "POST", RawModeData: "{\n    \"foo\": \"bar\"\n}"},
+	}
+	expectedOutputs := []string{
+		`curl -X POST -H "Content-Type: application/json" -H "Accept: */*" -d '{
+    "foo": "bar"
+}' "http://{{domain}}/api/items"`,
+	}
+
+	for i, req := range requests {
+		output := curlSnippet(req)
+		if output != expectedOutputs[i] {
+			t.Errorf("when i = %v, expected curl snippet to be:\n%v\n\nbut got:\n%v", i, expectedOutputs[i], output)
+		}
+	}
+}

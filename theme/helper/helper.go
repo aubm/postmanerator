@@ -3,6 +3,7 @@ package helper
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"text/template"
 
@@ -17,6 +18,7 @@ func GetFuncMap() template.FuncMap {
 		"markdown":     markdown,
 		"randomID":     randomID,
 		"indentJSON":   indentJSON,
+		"curlSnippet":  curlSnippet,
 	}
 }
 
@@ -51,4 +53,15 @@ func indentJSON(input string) (string, error) {
 	src := []byte(input)
 	err := json.Indent(dest, src, "", "    ")
 	return dest.String(), err
+}
+
+func curlSnippet(request postman.Request) string {
+	var formattedHeaders string
+	for _, header := range request.Headers() {
+		formattedHeaders += fmt.Sprintf(`-H "%v: %v" `, header.Name, header.Value)
+	}
+	if formattedHeaders == "" {
+		formattedHeaders = " "
+	}
+	return fmt.Sprintf(`curl -X %v %v-d '%v' "%v"`, request.Method, formattedHeaders, request.RawModeData, request.URL)
 }
