@@ -9,7 +9,7 @@ type Request struct {
 	PreRequestScript string        `json:"preRequestScript"`
 	PathVariables    interface{}   `json:"pathVariables"`
 	Method           string        `json:"method"`
-	Data             []interface{} `json:"data"`
+	Data             []RequestData `json:"data"`
 	DataMode         string        `json:"dataMode"`
 	Version          int           `json:"version"`
 	Tests            string        `json:"tests"`
@@ -26,6 +26,11 @@ type Request struct {
 type Header struct {
 	Name  string
 	Value string
+}
+
+type RequestData struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 func (req Request) Headers() (headers []Header) {

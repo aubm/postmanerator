@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"strings"
 	"text/template"
+
+	"regexp"
 
 	"github.com/aubm/postmanerator/postman"
 	"github.com/russross/blackfriday"
@@ -56,12 +59,40 @@ func indentJSON(input string) (string, error) {
 }
 
 func curlSnippet(request postman.Request) string {
-	var formattedHeaders string
+	var curlSnippet string
+	payloadReady, _ := regexp.Compile("POST|PUT|PATCH|DELETE")
+	curlSnippet += fmt.Sprintf("curl -X %v", request.Method)
+
+	if payloadReady.MatchString(request.Method) {
+		if request.DataMode == "urlencoded" {
+			curlSnippet += ` -H "Content-Type: application/x-www-form-urlencoded"`
+		} else if request.DataMode == "params" {
+			curlSnippet += ` -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"`
+		}
+	}
+
 	for _, header := range request.Headers() {
-		formattedHeaders += fmt.Sprintf(`-H "%v: %v" `, header.Name, header.Value)
+		curlSnippet += fmt.Sprintf(` -H "%v: %v"`, header.Name, header.Value)
 	}
-	if formattedHeaders == "" {
-		formattedHeaders = " "
+
+	if payloadReady.MatchString(request.Method) {
+		if request.DataMode == "raw" && request.RawModeData != "" {
+			curlSnippet += fmt.Sprintf(` -d '%v'`, request.RawModeData)
+		} else if len(request.Data) > 0 {
+			if request.DataMode == "urlencoded" {
+				var dataList []string
+				for _, data := range request.Data {
+					dataList = append(dataList, fmt.Sprintf("%v=%v", data.Key, data.Value))
+				}
+				curlSnippet += fmt.Sprintf(` -d "%v"`, strings.Join(dataList, "&"))
+			} else if request.DataMode == "params" {
+				for _, data := range request.Data {
+					curlSnippet += fmt.Sprintf(` -F "%v=%v"`, data.Key, data.Value)
+				}
+			}
+		}
 	}
-	return fmt.Sprintf(`curl -X %v %v-d '%v' "%v"`, request.Method, formattedHeaders, request.RawModeData, request.URL)
+
+	curlSnippet += fmt.Sprintf(` "%v"`, request.URL)
+	return curlSnippet
 }
