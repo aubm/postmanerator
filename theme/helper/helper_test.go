@@ -31,19 +31,20 @@ func TestFindRequest(t *testing.T) {
 	}
 }
 
+var stubRequests []postman.Request = []postman.Request{
+	{RawHeaders: "Content-Type: application/json\nAccept: */*\n", URL: "http://{{domain}}/api/items",
+		Method: "POST", RawModeData: "{\n    \"foo\": \"bar\"\n}", DataMode: "raw"},
+	{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items/45",
+		Method: "DELETE", RawModeData: "", DataMode: "raw"},
+	{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items/45",
+		Method: "GET", RawModeData: "some data", DataMode: "raw"},
+	{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items",
+		Method: "POST", Data: []postman.RequestData{{"firstname", "foo"}, {"lastname", "bar"}}, DataMode: "urlencoded"},
+	{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items",
+		Method: "POST", Data: []postman.RequestData{{"firstname", "foo"}, {"lastname", "bar"}}, DataMode: "params"},
+}
+
 func TestCurlSnippet(t *testing.T) {
-	requests := []postman.Request{
-		{RawHeaders: "Content-Type: application/json\nAccept: */*\n", URL: "http://{{domain}}/api/items",
-			Method: "POST", RawModeData: "{\n    \"foo\": \"bar\"\n}", DataMode: "raw"},
-		{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items/45",
-			Method: "DELETE", RawModeData: "", DataMode: "raw"},
-		{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items/45",
-			Method: "GET", RawModeData: "some data", DataMode: "raw"},
-		{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items",
-			Method: "POST", Data: []postman.RequestData{{"firstname", "foo"}, {"lastname", "bar"}}, DataMode: "urlencoded"},
-		{RawHeaders: "Accept: */*\n", URL: "http://{{domain}}/api/items",
-			Method: "POST", Data: []postman.RequestData{{"firstname", "foo"}, {"lastname", "bar"}}, DataMode: "params"},
-	}
 	expectedOutputs := []string{
 		`curl -X POST -H "Content-Type: application/json" -H "Accept: */*" -d '{
     "foo": "bar"
@@ -54,10 +55,56 @@ func TestCurlSnippet(t *testing.T) {
 		`curl -X POST -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW" -H "Accept: */*" -F "firstname=foo" -F "lastname=bar" "http://{{domain}}/api/items"`,
 	}
 
-	for i, req := range requests {
+	for i, req := range stubRequests {
 		output := curlSnippet(req)
 		if output != expectedOutputs[i] {
 			t.Errorf("when i = %v, expected curl snippet to be:\n%v\n\nbut got:\n%v", i, expectedOutputs[i], output)
+		}
+	}
+}
+
+func TestHttpSnippet(t *testing.T) {
+	expectedOutputs := []string{
+		`POST /api/items HTTP/1.1
+Host: {{domain}}
+Content-Type: application/json
+Accept: */*
+
+{
+    "foo": "bar"
+}`,
+		`DELETE /api/items/45 HTTP/1.1
+Host: {{domain}}
+Accept: */*`,
+		`GET /api/items/45 HTTP/1.1
+Host: {{domain}}
+Accept: */*`,
+		`POST /api/items HTTP/1.1
+Host: {{domain}}
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+
+firstname=foo&lastname=bar`,
+		`POST /api/items HTTP/1.1
+Host: {{domain}}
+Accept: */*
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="firstname"
+
+foo
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="lastname"
+
+bar
+----WebKitFormBoundary7MA4YWxkTrZu0gW`,
+	}
+
+	for i, req := range stubRequests {
+		output := httpSnippet(req)
+		if output != expectedOutputs[i] {
+			t.Errorf("when i = %v, expected http snippet to be:\n%v\n\nbut got:\n%v", i, expectedOutputs[i], output)
 		}
 	}
 }

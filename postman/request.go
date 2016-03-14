@@ -1,6 +1,10 @@
 package postman
 
-import "strings"
+import (
+	"log"
+	"net/url"
+	"strings"
+)
 
 type Request struct {
 	ID               string        `json:"id"`
@@ -43,4 +47,12 @@ func (req Request) Headers() (headers []Header) {
 		headers = append(headers, Header{keyVal[0], keyVal[1]})
 	}
 	return
+}
+
+func (req Request) ParsedURL() *url.URL {
+	parsedURL, err := url.Parse(req.URL)
+	if err != nil {
+		log.Fatalf("Tried to parse an invalid URL: %v", req.URL)
+	}
+	return parsedURL
 }
