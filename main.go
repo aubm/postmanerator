@@ -10,6 +10,7 @@ import (
 
 	"github.com/aubm/postmanerator/postman"
 	"github.com/aubm/postmanerator/theme/helper"
+	"github.com/fatih/color"
 	"github.com/howeyc/fsnotify"
 )
 
@@ -26,23 +27,23 @@ func main() {
 	args := flag.Args()
 
 	if len(args) != 1 {
-		checkErr(errors.New("Missing collection path"))
+		checkAndPrintErr(errors.New(""), "Missing collection path.")
 	}
 
 	if *outputFile != "" {
 		out, err = os.Create(*outputFile)
-		checkErr(err)
+		checkAndPrintErr(err, fmt.Sprintf("Failed to create output: %v", err))
 		defer out.Close()
 	}
 
 	col, err := postman.CollectionFromFile(args[0])
-	checkErr(err)
+	checkAndPrintErr(err, fmt.Sprintf("Failed to parse collection file: %v", err))
 
 	col.ExtractStructuresDefinition()
 
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Printf("error: %v\n", r)
+			color.Red("FAIL. %v\n", r)
 		}
 	}()
 	generate(out, col)
@@ -58,15 +59,15 @@ func generate(out *os.File, col *postman.Collection) {
 	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseGlob(fmt.Sprintf("%v/index.tpl", *theme)))
 	err := templates.ExecuteTemplate(out, "index.tpl", *col)
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
+		color.Red("FAIL. %v\n", err)
 		return
 	}
-	fmt.Print("done.\n")
+	fmt.Print(color.GreenString("SUCCESS.\n"))
 }
 
 func watchDir(dir string, action func()) {
 	watcher, err := fsnotify.NewWatcher()
-	checkErr(err)
+	checkAndPrintErr(err, fmt.Sprintf("Failed to create file watcher: %v", err))
 	defer watcher.Close()
 
 	done := make(chan bool)
@@ -74,7 +75,7 @@ func watchDir(dir string, action func()) {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				fmt.Printf("error: %v\n", r)
+				color.Red("FAIL. %v\n", r)
 			}
 			watchDir(dir, action)
 		}()
@@ -86,19 +87,20 @@ func watchDir(dir string, action func()) {
 					action()
 				}
 			case err := <-watcher.Error:
-				log.Printf("error: %v\n", err)
+				log.Printf("FAIL. %v\n", err)
 			}
 		}
 	}()
 
 	err = watcher.Watch(dir)
-	checkErr(err)
+	checkAndPrintErr(err, fmt.Sprintf("Failed to watch theme directory: %v", err))
 
 	<-done
 }
 
-func checkErr(err error) {
+func checkAndPrintErr(err error, msg string) {
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(color.RedString(msg))
+		os.Exit(1)
 	}
 }

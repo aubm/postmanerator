@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/robertkrimen/otto"
 )
 
@@ -28,6 +29,7 @@ func (col *Collection) ExtractStructuresDefinition() {
 		codeFragments = append(codeFragments, extractCodeFragments(req.Tests)...)
 	}
 	vm.Set("APIStructures", struct{}{})
+	color.Set(color.FgCyan)
 	for _, frag := range codeFragments {
 		frag = frag + `
 if (!!populateNewAPIStructures && typeof(populateNewAPIStructures) === 'function') {
@@ -35,6 +37,7 @@ if (!!populateNewAPIStructures && typeof(populateNewAPIStructures) === 'function
 }`
 		vm.Run(frag)
 	}
+	color.Unset()
 	if value, err := vm.Get("APIStructures"); err == nil {
 		if apiStructures := value.Object(); apiStructures != nil {
 			for _, key := range apiStructures.Keys() {
