@@ -56,7 +56,7 @@ func main() {
 func generate(out *os.File, col *postman.Collection) {
 	fmt.Print("Generating output ... ")
 	out.Truncate(0)
-	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseGlob(fmt.Sprintf("%v/index.tpl", *theme)))
+	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseGlob(fmt.Sprintf("%v/*", *theme)))
 	err := templates.ExecuteTemplate(out, "index.tpl", *col)
 	if err != nil {
 		color.Red("FAIL. %v\n", err)

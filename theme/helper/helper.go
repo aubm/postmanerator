@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
+	"net/http"
 	"regexp"
 	"strings"
 	"text/template"
@@ -22,6 +24,7 @@ func GetFuncMap() template.FuncMap {
 		"indentJSON":   indentJSON,
 		"curlSnippet":  curlSnippet,
 		"httpSnippet":  httpSnippet,
+		"inline":       inline,
 	}
 }
 
@@ -146,4 +149,17 @@ Content-Disposition: form-data; name="%v"
 	}
 
 	return
+}
+
+func inline(file string) (string, error) {
+	resp, err := http.Get(file)
+	if err != nil {
+		return "", fmt.Errorf("Failed to fetch URL %v: %v", file, err)
+	}
+	defer resp.Body.Close()
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("Failed to read HTTP response for URL %v: %v", file, err)
+	}
+	return string(content), nil
 }
