@@ -25,6 +25,7 @@ func GetFuncMap() template.FuncMap {
 		"curlSnippet":  curlSnippet,
 		"httpSnippet":  httpSnippet,
 		"inline":       inline,
+		"slugify":      slugify,
 	}
 }
 
@@ -162,4 +163,9 @@ func inline(file string) (string, error) {
 		return "", fmt.Errorf("Failed to read HTTP response for URL %v: %v", file, err)
 	}
 	return string(content), nil
+}
+
+func slugify(label string) string {
+	re := regexp.MustCompile("[^a-z0-9]+")
+	return strings.Trim(re.ReplaceAllString(strings.ToLower(label), "-"), "-")
 }

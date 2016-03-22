@@ -108,3 +108,21 @@ bar
 		}
 	}
 }
+
+func TestSlugify(t *testing.T) {
+	cases := []struct {
+		in  string
+		out string
+	}{
+		{"Hello, World!", "hello-world"},
+		{"Lorem @ Ipsum? Etc.", "lorem-ipsum-etc"},
+		{"Vivement l'été", "vivement-l-t"},
+	}
+
+	for _, c := range cases {
+		slug := slugify(c.in)
+		if slug != c.out {
+			t.Errorf("for in = %v, expected out to equal %v, but got %v", c.in, c.out, slug)
+		}
+	}
+}
