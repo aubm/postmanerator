@@ -6,8 +6,54 @@ h1 {
     margin-top: 5px;
 }
 
+h1, h2, h3, h4 {
+    color: #2b2b2b;
+}
+
+h2:after {
+    content: ' ';
+}
+
+h5 {
+    font-weight: bold;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    display: none;
+    position: absolute;
+    margin-left: 8px;
+}
+
+h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a {
+    color: #a5a5a5;
+    display: initial;
+}
+
+.nav.nav-tabs > li > a {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.tab-content {
+    padding-top: 8px;
+}
+
+.table {
+    margin-bottom: 8px;
+}
+
+pre {
+    border-radius: 0px;
+    border: none;
+}
+
 pre code {
     margin: -9.5px;
+}
+
+.request {
+    margin-top: 12px;
+    margin-bottom: 24px;
 }
 
 #sidebar-wrapper {
@@ -19,7 +65,7 @@ pre code {
     margin-left: -250px;
     overflow-y: auto;
     overflow-x: hidden;
-    background: #22313f;
+    background: #2b2b2b;
     padding-top: 20px;
 }
 
@@ -52,13 +98,13 @@ pre code {
 
 #sidebar-wrapper ul li a:hover,
 #sidebar-wrapper ul li a:focus {
-    color: #5dd7f2;
-    border-right: solid 1px #56bad5;
+    color: #e0c46c;
+    border-right: solid 1px #e0c46c;
 }
 
 #sidebar-wrapper ul li.active > a {
-    color: #56bad5;
-    border-right: solid 3px #56bad5;
+    color: #e0c46c;
+    border-right: solid 3px #e0c46c;
 }
 
 #sidebar-wrapper ul li:not(.active) ul {

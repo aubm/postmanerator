@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"regexp"
 	"strings"
@@ -20,7 +19,6 @@ func GetFuncMap() template.FuncMap {
 		"findRequest":  findRequest,
 		"findResponse": findResponse,
 		"markdown":     markdown,
-		"randomID":     randomID,
 		"indentJSON":   indentJSON,
 		"curlSnippet":  curlSnippet,
 		"httpSnippet":  httpSnippet,
@@ -49,10 +47,6 @@ func findResponse(req postman.Request, name string) *postman.Response {
 
 func markdown(input string) string {
 	return string(blackfriday.MarkdownBasic([]byte(input)))
-}
-
-func randomID() int {
-	return rand.Intn(999999999)
 }
 
 func indentJSON(input string) (string, error) {
