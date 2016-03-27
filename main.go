@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"text/template"
 
 	"github.com/aubm/postmanerator/postman"
@@ -17,10 +18,12 @@ import (
 var theme = flag.String("theme", "markdown_default", "the theme to use")
 var outputFile = flag.String("output", "", "the output file, default is stdout")
 var watch = flag.Bool("watch", false, "automatically regenerate the output when the theme changes")
+var ignoredResponseHeaders StringsFlag
 
 var out *os.File = os.Stdout
 
 func main() {
+	flag.Var(&ignoredResponseHeaders, "ignored-response-headers", "a comma seperated list of ignored response headers")
 	flag.Parse()
 
 	var err error
@@ -36,7 +39,9 @@ func main() {
 		defer out.Close()
 	}
 
-	col, err := postman.CollectionFromFile(args[0])
+	col, err := postman.CollectionFromFile(args[0], postman.CollectionOptions{
+		IgnoredResponseHeaders: postman.HeadersList(ignoredResponseHeaders.values),
+	})
 	checkAndPrintErr(err, fmt.Sprintf("Failed to parse collection file: %v", err))
 
 	col.ExtractStructuresDefinition()
@@ -103,4 +108,19 @@ func checkAndPrintErr(err error, msg string) {
 		fmt.Println(color.RedString(msg))
 		os.Exit(1)
 	}
+}
+
+type StringsFlag struct {
+	values []string
+}
+
+func (sf StringsFlag) String() string {
+	return fmt.Sprint(sf.values)
+}
+
+func (sf *StringsFlag) Set(value string) error {
+	if value != "" {
+		sf.values = strings.Split(value, ",")
+	}
+	return nil
 }

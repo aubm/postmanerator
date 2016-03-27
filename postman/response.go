@@ -7,18 +7,13 @@ type Response struct {
 		Name   string `json:"name"`
 		Detail string `json:"detail"`
 	} `json:"responseCode"`
-	Time    interface{} `json:"time"`
-	Headers []struct {
-		Name        string `json:"name"`
-		Key         string `json:"key"`
-		Value       string `json:"value"`
-		Description string `json:"description"`
-	} `json:"headers"`
-	Cookies     []interface{} `json:"cookies"`
-	Mime        string        `json:"mime"`
-	Text        string        `json:"text"`
-	Language    string        `json:"language"`
-	RawDataType string        `json:"rawDataType"`
+	Time        interface{}      `json:"time"`
+	Headers     []ResponseHeader `json:"headers"`
+	Cookies     []interface{}    `json:"cookies"`
+	Mime        string           `json:"mime"`
+	Text        string           `json:"text"`
+	Language    string           `json:"language"`
+	RawDataType string           `json:"rawDataType"`
 	State       struct {
 		Size string `json:"size"`
 	} `json:"state"`
@@ -45,4 +40,11 @@ type Response struct {
 		Method   string `json:"method"`
 		DataMode string `json:"dataMode"`
 	} `json:"request"`
+}
+
+type ResponseHeader struct {
+	Name        string `json:"name"`
+	Key         string `json:"key"`
+	Value       string `json:"value"`
+	Description string `json:"description"`
 }

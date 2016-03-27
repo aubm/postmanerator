@@ -56,6 +56,15 @@ pre code {
     margin-bottom: 24px;
 }
 
+.response-text-sample {
+    padding: 0px !important;
+}
+
+.response-text-sample pre {
+    margin-bottom: 0px;
+}
+
+
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;

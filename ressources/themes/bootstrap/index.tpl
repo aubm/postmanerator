@@ -117,13 +117,16 @@
                                     {{ range $index, $res := . }}
                                     <div class="tab-pane{{ if eq $index 0 }} active{{ end }}" id="request-{{ slugify $req.Name }}-responses-{{ $res.ID }}">
                                         <table class="table table-bordered">
-                                            <tr><th style="width: 20%;">Code</th><td>{{ $res.ResponseCode.Code }}</td></tr>
-                                            <tr><th style="width: 20%;">Status</th><td>{{ $res.ResponseCode.Name }}</td></tr>
+                                            <tr><th style="width: 20%;">Status</th><td>{{ $res.ResponseCode.Code }} {{ $res.ResponseCode.Name }}</td></tr>
+                                            {{ range $res.Headers }}
+                                            <tr><th style="width: 20%;">{{ .Name }}</th><td>{{ .Value }}</td></tr>
+                                            {{ end }}
+                                            {{ with $example := $res.Text }}
+                                            <tr><td class="response-text-sample" colspan="2">
+                                                <pre><code>{{ indentJSON $example }}</code></pre>
+                                            </td></tr>
+                                            {{ end }}
                                         </table>
-
-                                        {{ with $example := $res.Text }}
-                                        <pre><code>{{ indentJSON $example }}</code></pre>
-                                        {{ end }}
                                     </div>
                                     {{ end }}
                                 </div>

@@ -7,7 +7,7 @@ import (
 
 func TestExtractStructuresDefinition(t *testing.T) {
 	// Given
-	col, _ := CollectionFromFile("../tests_data/collection-01.json")
+	col, _ := CollectionFromFile("../tests_data/collection-01.json", CollectionOptions{})
 	if col == nil {
 		t.Error("Cannot test extracting structures definitions, collection is nil")
 		return
