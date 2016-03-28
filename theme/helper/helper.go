@@ -24,6 +24,7 @@ func GetFuncMap() template.FuncMap {
 		"httpSnippet":  httpSnippet,
 		"inline":       inline,
 		"slugify":      slugify,
+		"hasContent":   hasContent,
 	}
 }
 
@@ -49,11 +50,14 @@ func markdown(input string) string {
 	return string(blackfriday.MarkdownBasic([]byte(input)))
 }
 
-func indentJSON(input string) (string, error) {
+func indentJSON(input string) string {
 	dest := new(bytes.Buffer)
 	src := []byte(input)
 	err := json.Indent(dest, src, "", "    ")
-	return dest.String(), err
+	if err != nil {
+		return ""
+	}
+	return dest.String()
 }
 
 func curlSnippet(request postman.Request) string {
@@ -162,4 +166,10 @@ func inline(file string) (string, error) {
 func slugify(label string) string {
 	re := regexp.MustCompile("[^a-z0-9]+")
 	return strings.Trim(re.ReplaceAllString(strings.ToLower(label), "-"), "-")
+}
+
+func hasContent(input string) bool {
+	input = strings.Trim(input, " ")
+	input = strings.Trim(input, "\n")
+	return input != ""
 }

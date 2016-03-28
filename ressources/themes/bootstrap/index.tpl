@@ -121,10 +121,12 @@
                                             {{ range $res.Headers }}
                                             <tr><th style="width: 20%;">{{ .Name }}</th><td>{{ .Value }}</td></tr>
                                             {{ end }}
-                                            {{ with $example := $res.Text }}
-                                            <tr><td class="response-text-sample" colspan="2">
-                                                <pre><code>{{ indentJSON $example }}</code></pre>
-                                            </td></tr>
+                                            {{ if hasContent $res.Text }}
+                                                {{ with $example := indentJSON $res.Text }}
+                                                <tr><td class="response-text-sample" colspan="2">
+                                                    <pre><code>{{ $example }}</code></pre>
+                                                </td></tr>
+                                                {{ end }}
                                             {{ end }}
                                         </table>
                                     </div>
