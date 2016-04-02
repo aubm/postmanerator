@@ -18,12 +18,14 @@ import (
 var theme = flag.String("theme", "markdown_default", "the theme to use")
 var outputFile = flag.String("output", "", "the output file, default is stdout")
 var watch = flag.Bool("watch", false, "automatically regenerate the output when the theme changes")
+var ignoredRequestHeaders StringsFlag
 var ignoredResponseHeaders StringsFlag
 
 var out *os.File = os.Stdout
 
 func main() {
 	flag.Var(&ignoredResponseHeaders, "ignored-response-headers", "a comma seperated list of ignored response headers")
+	flag.Var(&ignoredRequestHeaders, "ignored-request-headers", "a comma seperated list of ignored request headers")
 	flag.Parse()
 
 	var err error
@@ -40,6 +42,7 @@ func main() {
 	}
 
 	col, err := postman.CollectionFromFile(args[0], postman.CollectionOptions{
+		IgnoredRequestHeaders:  postman.HeadersList(ignoredRequestHeaders.values),
 		IgnoredResponseHeaders: postman.HeadersList(ignoredResponseHeaders.values),
 	})
 	checkAndPrintErr(err, fmt.Sprintf("Failed to parse collection file: %v", err))

@@ -3,6 +3,7 @@ package postman
 import (
 	"encoding/json"
 	"io/ioutil"
+	"strings"
 )
 
 type Collection struct {
@@ -33,6 +34,22 @@ func CollectionFromFile(file string, options CollectionOptions) (*Collection, er
 		return nil, err
 	}
 
+	if len(options.IgnoredRequestHeaders) > 0 {
+		for i := 0; i < len(col.Requests); i++ {
+			var newRawHeaders []string
+			for _, rawHeader := range strings.Split(col.Requests[i].RawHeaders, "\n") {
+				if rawHeader == "" {
+					continue
+				}
+				headerName := strings.Split(rawHeader, ":")[0]
+				if !options.IgnoredRequestHeaders.Contains(headerName) {
+					newRawHeaders = append(newRawHeaders, rawHeader)
+				}
+			}
+			col.Requests[i].RawHeaders = strings.Join(newRawHeaders, "\n")
+		}
+	}
+
 	if len(options.IgnoredResponseHeaders) > 0 {
 		for i := 0; i < len(col.Requests); i++ {
 			for j := 0; j < len(col.Requests[i].Responses); j++ {
@@ -51,6 +68,7 @@ func CollectionFromFile(file string, options CollectionOptions) (*Collection, er
 }
 
 type CollectionOptions struct {
+	IgnoredRequestHeaders  HeadersList
 	IgnoredResponseHeaders HeadersList
 }
 
