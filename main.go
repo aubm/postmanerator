@@ -6,33 +6,85 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/user"
 	"strings"
 	"text/template"
 
 	"github.com/aubm/postmanerator/postman"
+	"github.com/aubm/postmanerator/theme"
 	"github.com/aubm/postmanerator/theme/helper"
 	"github.com/fatih/color"
 	"github.com/howeyc/fsnotify"
 )
 
-var theme = flag.String("theme", "markdown_default", "the theme to use")
+var collectionFile = flag.String("collection", "", "the postman exported collection JSON file")
+var usedTheme = flag.String("theme", "default", "the theme to use")
 var outputFile = flag.String("output", "", "the output file, default is stdout")
 var watch = flag.Bool("watch", false, "automatically regenerate the output when the theme changes")
+var localName = flag.String("local-name", "", "the name of the local copy of the downloaded theme")
 var ignoredRequestHeaders StringsFlag
 var ignoredResponseHeaders StringsFlag
 
+var themesDirectory string
 var out *os.File = os.Stdout
+var args []string
+
+var emptyErr = errors.New("")
 
 func main() {
 	flag.Var(&ignoredResponseHeaders, "ignored-response-headers", "a comma seperated list of ignored response headers")
 	flag.Var(&ignoredRequestHeaders, "ignored-request-headers", "a comma seperated list of ignored request headers")
 	flag.Parse()
 
-	var err error
-	args := flag.Args()
+	themesDirectory = os.Getenv("POSTMANERATOR_PATH")
+	if themesDirectory == "" {
+		usr, err := user.Current()
+		checkAndPrintErr(err, fmt.Sprintf("An error occured while trying to determine which directory to use for themes: %v", err))
+		themesDirectory = fmt.Sprintf("%v/.postmanerator", usr.HomeDir)
+	}
+	themesDirectory += "/themes"
+	if _, err := os.Stat(themesDirectory); os.IsNotExist(err) {
+		err := os.MkdirAll(themesDirectory, 0777)
+		checkAndPrintErr(err, fmt.Sprintf("Failed to create themes directory: %v", err))
+	}
 
-	if len(args) != 1 {
-		checkAndPrintErr(errors.New(""), "Missing collection path.")
+	args = flag.Args()
+
+	if len(args) == 0 {
+		defaultCommand()
+		return
+	}
+
+	printHelp := func() {
+		documentationURL := "https://github.com/aubm/postmanerator"
+		checkAndPrintErr(emptyErr, fmt.Sprintf("Command '%v' not found, please see the documention at %v", strings.Join(args, " "), documentationURL))
+	}
+
+	switch args[0] {
+	case "themes":
+		if len(args) < 2 {
+			printHelp()
+		}
+		switch args[1] {
+		case "get":
+			getTheme()
+		case "delete":
+			deleteTheme()
+		case "list":
+			listThemes()
+		default:
+			printHelp()
+		}
+	default:
+		printHelp()
+	}
+}
+
+func defaultCommand() {
+	var err error
+
+	if *collectionFile == "" {
+		checkAndPrintErr(emptyErr, "You must provide a collection using the -collection flag")
 	}
 
 	if *outputFile != "" {
@@ -41,7 +93,7 @@ func main() {
 		defer out.Close()
 	}
 
-	col, err := postman.CollectionFromFile(args[0], postman.CollectionOptions{
+	col, err := postman.CollectionFromFile(*collectionFile, postman.CollectionOptions{
 		IgnoredRequestHeaders:  postman.HeadersList(ignoredRequestHeaders.values),
 		IgnoredResponseHeaders: postman.HeadersList(ignoredResponseHeaders.values),
 	})
@@ -49,22 +101,31 @@ func main() {
 
 	col.ExtractStructuresDefinition()
 
+	themePath, err := theme.GetThemePath(*usedTheme, themesDirectory)
+	if err != nil {
+		checkAndPrintErr(emptyErr, "The theme was not found")
+	}
+	themeFiles, err := theme.ListThemeFiles(themePath)
+	if err != nil {
+		checkAndPrintErr(err, "")
+	}
+
 	defer func() {
 		if r := recover(); r != nil {
 			color.Red("FAIL. %v\n", r)
 		}
 	}()
-	generate(out, col)
+	generate(out, themeFiles, col)
 
 	if *watch {
-		watchDir(*theme, func() { generate(out, col) })
+		watchDir(themePath, func() { generate(out, themeFiles, col) })
 	}
 }
 
-func generate(out *os.File, col *postman.Collection) {
+func generate(out *os.File, themeFiles []string, col *postman.Collection) {
 	fmt.Print("Generating output ... ")
 	out.Truncate(0)
-	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseGlob(fmt.Sprintf("%v/*", *theme)))
+	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseFiles(themeFiles...))
 	err := templates.ExecuteTemplate(out, "index.tpl", *col)
 	if err != nil {
 		color.Red("FAIL. %v\n", err)
@@ -108,6 +169,9 @@ func watchDir(dir string, action func()) {
 
 func checkAndPrintErr(err error, msg string) {
 	if err != nil {
+		if msg == "" {
+			msg = err.Error()
+		}
 		fmt.Println(color.RedString(msg))
 		os.Exit(1)
 	}
@@ -126,4 +190,31 @@ func (sf *StringsFlag) Set(value string) error {
 		sf.values = strings.Split(value, ",")
 	}
 	return nil
+}
+
+func getTheme() {
+	if len(args) < 3 {
+		checkAndPrintErr(emptyErr, "You must provide the name or the URL of the theme you want to download")
+	}
+
+	err := theme.GitClone(args[2], themesDirectory, *localName)
+	checkAndPrintErr(err, "")
+
+	fmt.Println(color.GreenString("Theme successfully downloaded"))
+}
+
+func deleteTheme() {
+	if len(args) < 3 {
+		checkAndPrintErr(emptyErr, "You must provide the name of the theme you want to delete")
+	}
+
+	err := theme.Delete(args[2], themesDirectory)
+	checkAndPrintErr(err, "")
+
+	fmt.Println(color.GreenString("Theme successfully deleted"))
+}
+
+func listThemes() {
+	err := theme.ListThemes(os.Stdout, themesDirectory)
+	checkAndPrintErr(err, "")
 }

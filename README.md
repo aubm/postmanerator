@@ -6,7 +6,10 @@ This a program that parses exported Postman collections to generate HTTP API doc
 
 ## Usage
 
-`postmanerator -theme='/path/to/theme' -output='./doc.html' /path/to/your/collection.postman.json`
+```
+postmanerator themes get default
+postmanerator -output='./doc.html' -collection='/path/to/your/collection.postman.json'
+```
 
 ## Themes
 
