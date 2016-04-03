@@ -4,11 +4,11 @@
 
 Some guy said:
 
-> How great would it be if we could use well maintained [Postman](https://www.getpostman.com/) collections to generate beautiful documentations with a single command?
+> How great would it be if we could use the well maintained [Postman](https://www.getpostman.com/) collections to generate beautiful documentations with a single command?
 
-Well guess what some guy, now you can use Postmanerator to do just that! How you said?
+Well guess what some guy, now you can use Postmanerator to do just that! Can I?
 
-Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest), obviously you need to pick the right binary depending on your environnement. Then place that binary somewhere in your system that is in your PATH, you might want to rename it to simply `postmanerator`.
+Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest), you obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you might want to rename it to simply `postmanerator`.
 
 After that, export your Postman collection, let's say in `$YOUR_PROJECT/postman/collection.json` and simply run:
 
@@ -22,9 +22,9 @@ Want to see the result? Take a look at [this example](#).
 
 There are chances that the "out-of-the-box" behavior is not good enough for you. Please consider using the following recommandations and command line options to ensure you get the result you expect.
 
-- **Use folders**: the `default` theme will loop over your collection folders to find requests. "Orphan" requests will simply not be present in the documentation. Fortunatly if this is not something you like, you have the ability to fork and edit the default theme to change that behavior. Please see the documentation for [creating your own themes](#create-your-own-theme).
-- **Use relevant names and descriptions**: folders and requests names are used to create the structure of the generated documentation. You may want to use relevant headers. Also feel free to write good descriptions for your folders (documentation sections) and requests, as they will be rendered. You may be interested to know that the `default` theme will parse any [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) content found in descriptions.
-- **Use saved responses**: all saved request's responses are rendered in the `default` theme. You may want to use them to show different  potential responses to your users, maybe some "successfull" response or an "invalid data error" response.
+- **Use folders**: the `default` theme will parse your collection folders to find requests. "Orphan" requests will simply not be available in the documentation. Fortunately if this is not something you like, you have the ability to fork and edit the default theme to change that behavior. Please see the documentation for [creating your own themes](#create-your-own-theme).
+- **Use relevant names and descriptions**: folders and requests names are used to create the structure of the generated documentation. You may want to use relevant headers. Furthermore, feel free to write good descriptions for your folders (documentation sections) and requests, as they will be rendered. You may be interested to know that the `default` theme will parse any [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) content found in descriptions.
+- **Use saved responses**: all saved request's responses are rendered in the `default` theme. You may want to use them to show different potential responses to your users, maybe some "successfull" responses or an "invalid data error" response.
 
 ### Provide a collection file
 
@@ -52,9 +52,9 @@ Maybe they are some request/response headers you don't want to see in your docum
 
 ## Define API structures
 
-You may have noticed that API structures are documented at the beginning of [this example generated documentation](#). Also you might be interested to know that these elements are not hard coded in the theme. Actually you have the ability to provide these information to Postmanerator. How you asked?
+You may have noticed that API structures are documented at the beginning of [this example generated documentation](#). Therefore you might be interested to know that these elements are not hard coded in the theme. You actually have the ability to provide these information to Postmanerator. How's that? you asked.
 
-If you know how to use Postman to automate integration tests, then you know that these test cases are written in Javascript. From there, you can now use Javascript to define your API structures for Postmanerator. Consider the following code snippet inserted in any of your requests "Tests" pane:
+If you know how to use Postman to automate integration tests, then you know that these test cases are written in Javascript. Knowing that, you can now use Javascript to define your API structures for Postmanerator. Consider the following code snippet inserted in any of your requests "Tests" pane:
 
 ```javascript
 /*[[start postmanerator]]*/
@@ -72,11 +72,11 @@ function populateNewAPIStructures() {
 /*[[end postmanerator]]*/
 ```
 
-The `/*[[start postmanerator]]*/` and `/*[[end postmanerator]]*/` delimiters are important, Postmanerator will search for these delimiters to identity the portion of Javascript it needs to interpret.
+The `/*[[start postmanerator]]*/` and `/*[[end postmanerator]]*/` delimiters are important, Postmanerator will search for these delimiters to identify the portion of Javascript it needs to interpret.
 
-The name of the function `populateNewAPIStructures` is also important as Postmanerator will execute that exact function. You can define as many of these code snippets as you need, even in multiple independant requests.
+The name of the function `populateNewAPIStructures` is also important as Postmanerator will execute this exact function. You can define as many of these code snippets as you need, even in multiple independant requests.
 
-When Postmanerator is done executing all the snippets, it will search for defined objects in the `APIStructures` global variable, and make these structures definitions available for the theme.
+When Postmanerator is done executing all the snippets, it will look for defined objects in the `APIStructures` global variable and make these structures definitions available for the theme.
 
 ## Themes
 
@@ -85,18 +85,18 @@ This is done by exposing the collection data with a few helpers to a theme. A th
 
 ### List themes
 
-If you want to know the list of themes that are available in your local environnement, simply use the following command:
+If you want to know the list of themes that are available in your local environment, simply use the following command:
 
 ```
 postmanerator themes list
 ```
 
-The list of available themes will be printed out to the standard output. By default themes are located under the `$USER_HOME/.postmanerator/themes` directory. If you want to change that, simply define the `POSTMANERATOR_PATH` environnement variable.
+The list of available themes will be printed out to the standard output. By default, themes are located under the `$USER_HOME/.postmanerator/themes` directory. If you want to change that, simply define the `POSTMANERATOR_PATH` environment variable.
 
 ### Download new themes
 
 By now, you probably only have the `default` theme available, the `postmanerator themes get` command allows you download a new existing theme.
-You can either specify the name of one of the themes that are indexed in the [official themes repository](https://github.com/aubm/postmanerator-themes), or either specify a full URL pointing to git repository. Also the `-local-name` option allows you to change the name of your local copy of the theme. Please see the following examples.
+You can either specify the name of one of the themes that are indexed in the [official themes repository](https://github.com/aubm/postmanerator-themes), or either specify a full URL pointing to git repository. Moreover the `-local-name` option allows you to change the name of your local copy of the theme. Please see the following examples.
 
 ```bash
 postmanerator themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'markdown'
@@ -107,7 +107,7 @@ postmanerator -local-name="markdown" themes get https://github.com/aubm/postmane
 
 ### Delete a theme
 
-Use the following command to delete a theme from your local themes directory.
+Use the following command to remove a theme from your local themes directory.
 
 ```
 postmanerator themes delete markdown
@@ -115,7 +115,7 @@ postmanerator themes delete markdown
 
 ### Create your own theme
 
-So far, all we did was playing with existing themes. While this may be good enough, eventually you may want to customize the look of your documentation. A theme really is just a folder with an `index.tpl` inside, so starting your own one is not that difficult.
+So far, all we did was playing with existing themes. While this may be good enough, you may eventually want to customize the look of your documentation. A theme is really just a folder with an `index.tpl` inside, so starting your own one is not that difficult.
 
 If you start from the existing `default`, which could be a good idea, you will notice that the syntax is pretty simple. In fact, if you have been writing some Go code, there are chances that you have been playing with the `template/text` package from the standard library.
 If so, then good news: you (almost) already know everything you need to know to get started.
@@ -194,7 +194,7 @@ Alternatively, you can generate a HTTP snippet from a request:
 
 #### Inline some content
 
-Let's assume you are creating a HTML theme, at some point you may want to use libraries downloaded from some CDN like `highlighjs` or `jquery`. If so, it is also possible that you want your generated documentation to be fully functionnal even without an internet connexion.
+Let's assume you are creating a HTML theme, at some point you may want to use libraries downloaded from some CDN like `highlightjs` or `jquery`. If so, it is also possible that you want your generated documentation to be fully functionnal even without an internet connexion.
 
 To help you with that, Postmanerator can download some content on the web, and inline it in your template on the fly. Consider the following example:
 
