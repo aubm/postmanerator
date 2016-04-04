@@ -4,11 +4,11 @@
 
 Some guy said:
 
-> How great would it be if we could use  well maintained [Postman](https://www.getpostman.com/) well mcollections to generate beautiful documentations with a single command?
+> How great would it be if we could use [Postman's](https://www.getpostman.com/) well- maintained collections to generate beautiful documentations with a single command?
 
 Well guess what some guy, now you can use Postmanerator to do just that! Can I?
 
-Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest) well-maintained collections. You obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you could rename it to simply `postmanerator`.
+Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest). You obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you could rename it to simply `postmanerator`.
 
 After that, export your Postman collection, let's say in `$YOUR_PROJECT/postman/collection.json` and simply run:
 
