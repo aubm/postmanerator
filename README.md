@@ -4,7 +4,7 @@
 
 Some guy said:
 
-> How great would it be if we could use [Postman's](https://www.getpostman.com/) well- maintained collections to generate beautiful documentations with a single command?
+> How great would it be if we could use [Postman's](https://www.getpostman.com/) well-maintained collections to generate beautiful documentations with a single command?
 
 Well guess what some guy, now you can use Postmanerator to do just that! Can I?
 
