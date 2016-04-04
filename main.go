@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -101,7 +102,7 @@ func defaultCommand() {
 
 	col.ExtractStructuresDefinition()
 
-	themePath, err := theme.GetThemePath(*usedTheme, themesDirectory)
+	themePath, err := getThemePath()
 	if err != nil {
 		checkAndPrintErr(emptyErr, "The theme was not found")
 	}
@@ -120,6 +121,20 @@ func defaultCommand() {
 	if *watch {
 		watchDir(themePath, func() { generate(out, themeFiles, col) })
 	}
+}
+
+func getThemePath() (string, error) {
+	themePath, err := theme.GetThemePath(*usedTheme, themesDirectory)
+	if err != nil {
+		if ok, _ := regexp.MatchString(`\/|\\`, *usedTheme); ok == false {
+			fmt.Println(color.BlueString("Theme '%v' not found, trying to download it...", *usedTheme))
+			if err := theme.GitClone(*usedTheme, themesDirectory, ""); err == nil {
+				return theme.GetThemePath(*usedTheme, themesDirectory)
+			}
+		}
+		return "", err
+	}
+	return themePath, nil
 }
 
 func generate(out *os.File, themeFiles []string, col *postman.Collection) {
