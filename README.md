@@ -4,11 +4,11 @@
 
 Some guy said:
 
-> How great would it be if we could use the well maintained [Postman](https://www.getpostman.com/) collections to generate beautiful documentations with a single command?
+> How great would it be if we could use  well maintained [Postman](https://www.getpostman.com/) well mcollections to generate beautiful documentations with a single command?
 
 Well guess what some guy, now you can use Postmanerator to do just that! Can I?
 
-Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest), you obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you might want to rename it to simply `postmanerator`.
+Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest) well-maintained collections. You obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you could rename it to simply `postmanerator`.
 
 After that, export your Postman collection, let's say in `$YOUR_PROJECT/postman/collection.json` and simply run:
 
@@ -24,7 +24,7 @@ There are chances that the "out-of-the-box" behavior is not good enough for you.
 
 - **Use folders**: the `default` theme will parse your collection folders to find requests. "Orphan" requests will simply not be available in the documentation. Fortunately if this is not something you like, you have the ability to fork and edit the default theme to change that behavior. Please see the documentation for [creating your own themes](#create-your-own-theme).
 - **Use relevant names and descriptions**: folders and requests names are used to create the structure of the generated documentation. You may want to use relevant headers. Furthermore, feel free to write good descriptions for your folders (documentation sections) and requests, as they will be rendered. You may be interested to know that the `default` theme will parse any [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) content found in descriptions.
-- **Use saved responses**: all saved request's responses are rendered in the `default` theme. You may want to use them to show different potential responses to your users, maybe some "successfull" responses or an "invalid data error" response.
+- **Use saved responses**: all saved request's responses are rendered in the `default` theme. You may want to use them to show different potential responses to your users, like a "successfull" response or an "invalid data error" response.
 
 ### Provide a collection file
 
