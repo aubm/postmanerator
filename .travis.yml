@@ -1,29 +1,37 @@
 language: go
 go:
 - 1.5
+env:
+  global:
+    secure: EI1uZ9aRkZCAft/nMn9lJiEX+UQ4DiN7UdH+Ot94Ad5PQSbqy/P9rl8oStFub/EU+W/R+LpTpn3x7wIRu78v0ITzhsbmhRY2JRa3G10GMykOL6U6kBb23uIJepfbYypKNnjoraZ/su7VPbBaUkecDBkexO9p14yENvIl2gy3BUXeJRgdALiRn+C5CC0PKsiX437WHlYCk3rSZdSe0EUtyqoNqoFslU4lHnDBO4WWgqe3wEcksruFk6dDDKZB3SvezJzCfpif344J46qXlM5pKwx0ytjCEV0pzL85i6XlmXIL/STUWnwUjMjid/RZfXndb9QnL90lgS1eALzMM4VH7wnbhtWcNNrFWv/rTbFvSxvIkBrAv1YU562w8ESGS+q/a+PyWUb1zVx9tLjf/U3qjfDx7p8tlcSE8AHw8HN4P4dqZLNC+47rGBzJZpYd+MIYy8mMo+s9GDWaypKAqLLtwuWL8KGm6HGyVn3yW+mEugpISl8/BFhqHl5z6B87yM3nq1k9d70DD12JLtt6s5Niu7h0PbPlrV9DqNPSvMI8C+kfYrBelLbrdJrvu6ImprB8Sb/q+AKRIrqBZF3KKIi/5zmRo++f0j8vMEv1qAIM5hMcZUlbmzSzgCw5e7FbiH7Wy4GerGlamTvwRkVMEVlM1wtM9R9ER5lYm6ZylwQoCZM=
+before_install:
+- go get github.com/mattn/goveralls
+- go get golang.org/x/tools/cmd/cover
+script:
+  - ./scripts/coverage --coveralls
 before_deploy:
-  - go get github.com/mitchellh/gox
-  - gox
+- go get github.com/mitchellh/gox
+- gox
 deploy:
   provider: releases
   api_key:
     secure: 04q187Wkcx1GkMjDqTvdt+5Aq2ZmohEtS9ztIzTxvdhwmmFrcRK/hh5zsmknQyScCg61f3VOcyizv27rRPFfyVBe9HX2UrofluMZ6e0i49hhgzQFt0v6SYOJG6m7rp38AQc06JE1gLzcOejFH6ris/TXNVIhmih84urClOPF4ELYkcvax4Os/lsh4nByOHtQowTkxMhO8f/Pc9V68NQuPjSJfQiyW3IM7LTguiQKJUdsI5/tA5OxziQS/mDLSVwCR3jecRoD9+zl1IAX2wxNsxHBjbZ2cbi9BDPJmOayTChFbLiCFhi3qwsCBAEZYrbkdYc5Yh1kBnT+CZTuPXBXPXrdla9SqwspiF3qF55FQOcw0bdBw5mLYqOmsKoHjH2QTSzGEwBS1cStuFjx42VxTvk5wvUOhl2LfW57LV1MZrdw1F6sFpPZwCuWUEb/s1UFgnU4MSJMAFxwVP0ycoR4bU+n74TyLXM1SDxk2Ou2i3nVrcZNCBRrJIHO4pa679KMOjsC9u4wvBNuV4VISV78/g2VEoFlp+vJGPECMnZc/0ZBAylS3m6ktvJRYKKGQRDqkr9Ir9CsTHqxCbHMHt9zQ/kW8D9JRnDVvJs4rbtiDDk78ezXo6+OXIq2dVQ0lRjT8+BsgDUtRqfnhBBKCHWMxudDGC+MKOabCa2QOqT2Wew=
   file:
-    - "postmanerator_darwin_386"
-    - "postmanerator_darwin_amd64"
-    - "postmanerator_freebsd_386"
-    - "postmanerator_freebsd_amd64"
-    - "postmanerator_freebsd_arm"
-    - "postmanerator_linux_386"
-    - "postmanerator_linux_amd64"
-    - "postmanerator_linux_arm"
-    - "postmanerator_netbsd_386"
-    - "postmanerator_netbsd_amd64"
-    - "postmanerator_netbsd_arm"
-    - "postmanerator_openbsd_386"
-    - "postmanerator_openbsd_amd64"
-    - "postmanerator_windows_386.exe"
-    - "postmanerator_windows_amd64.exe"
+  - postmanerator_darwin_386
+  - postmanerator_darwin_amd64
+  - postmanerator_freebsd_386
+  - postmanerator_freebsd_amd64
+  - postmanerator_freebsd_arm
+  - postmanerator_linux_386
+  - postmanerator_linux_amd64
+  - postmanerator_linux_arm
+  - postmanerator_netbsd_386
+  - postmanerator_netbsd_amd64
+  - postmanerator_netbsd_arm
+  - postmanerator_openbsd_386
+  - postmanerator_openbsd_amd64
+  - postmanerator_windows_386.exe
+  - postmanerator_windows_amd64.exe
   on:
     repo: aubm/postmanerator
     tags: true
