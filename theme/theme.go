@@ -13,17 +13,37 @@ import (
 	"time"
 )
 
-func GitClone(themeToDownload string, themesDirectory string, destinationDir string) error {
+type Cloner interface {
+	Clone(args []string) error
+}
+
+type DefaultCloner struct {
+	ThemesDirectory string
+}
+
+func (c DefaultCloner) Clone(args []string) error {
+	args = append([]string{"clone"}, args...)
+	cmd := exec.Command("git", args...)
+	cmd.Dir = c.ThemesDirectory
+	stdErr := new(bytes.Buffer)
+	cmd.Stderr = stdErr
+	if err := cmd.Run(); err != nil {
+		return errors.New(stdErr.String())
+	}
+	return nil
+}
+
+func GitClone(themeToDownload string, destinationDir string, themesRepository string, git Cloner) error {
 	var (
 		err      error
 		themeURL string
 		byName   bool
 	)
-	if themeURL, byName, err = getThemeURL(themeToDownload); err != nil {
-		return errors.New(fmt.Sprintf("An error occured while trying to resolve theme %v: %v", themeToDownload, err))
+	if themeURL, byName, err = getThemeURL(themeToDownload, themesRepository); err != nil {
+		return errors.New(fmt.Sprintf("An error occured while trying to resolve theme '%v': %v", themeToDownload, err))
 	}
 
-	args := []string{"clone", themeURL}
+	args := []string{themeURL}
 	if destinationDir == "" {
 		if byName {
 			args = append(args, themeToDownload)
@@ -31,19 +51,15 @@ func GitClone(themeToDownload string, themesDirectory string, destinationDir str
 	} else {
 		args = append(args, destinationDir)
 	}
-	cmd := exec.Command("git", args...)
-	cmd.Dir = themesDirectory
-	stdErr := new(bytes.Buffer)
-	cmd.Stderr = stdErr
 
-	if err = cmd.Run(); err != nil {
-		return errors.New(fmt.Sprintf("There was an error while executing git clone: %v", stdErr.String()))
+	if err = git.Clone(args); err != nil {
+		return errors.New(fmt.Sprintf("There was an error while executing git clone: %v", err))
 	}
 
 	return nil
 }
 
-func getThemeURL(themeToDownload string) (string, bool, error) {
+func getThemeURL(themeToDownload string, themesRepository string) (string, bool, error) {
 	if match, _ := regexp.MatchString(`(https?:\/\/)|(git@)`, themeToDownload); match == true {
 		return themeToDownload, false, nil
 	}
@@ -55,7 +71,7 @@ func getThemeURL(themeToDownload string) (string, bool, error) {
 		i        int = 1
 	)
 	for {
-		resp, err = http.Get("https://raw.githubusercontent.com/aubm/postmanerator-themes/master/.gitmodules")
+		resp, err = http.Get(themesRepository)
 		if err != nil {
 			if i >= maxTries {
 				return "", true, err
@@ -78,7 +94,7 @@ func getThemeURL(themeToDownload string) (string, bool, error) {
 		}
 	}
 
-	return "", true, errors.New(fmt.Sprintf("Theme not found: %v", themeToDownload))
+	return "", true, errors.New("theme not found")
 }
 
 func Delete(themeToDelete string, themesDirectory string) error {

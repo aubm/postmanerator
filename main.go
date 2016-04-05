@@ -18,6 +18,8 @@ import (
 	"github.com/howeyc/fsnotify"
 )
 
+const THEMES_REPOSITORY string = "https://raw.githubusercontent.com/aubm/postmanerator-themes/master/.gitmodules"
+
 var collectionFile = flag.String("collection", "", "the postman exported collection JSON file")
 var usedTheme = flag.String("theme", "default", "the theme to use")
 var outputFile = flag.String("output", "", "the output file, default is stdout")
@@ -139,7 +141,7 @@ func getThemePath() (string, error) {
 	if err != nil {
 		if ok, _ := regexp.MatchString(`\/|\\`, *usedTheme); ok == false {
 			fmt.Println(color.BlueString("Theme '%v' not found, trying to download it...", *usedTheme))
-			if err := theme.GitClone(*usedTheme, themesDirectory, ""); err == nil {
+			if err := theme.GitClone(*usedTheme, "", THEMES_REPOSITORY, theme.DefaultCloner{themesDirectory}); err == nil {
 				return theme.GetThemePath(*usedTheme, themesDirectory)
 			}
 		}
@@ -223,7 +225,7 @@ func getTheme() {
 		checkAndPrintErr(emptyErr, "You must provide the name or the URL of the theme you want to download")
 	}
 
-	err := theme.GitClone(args[2], themesDirectory, *localName)
+	err := theme.GitClone(args[2], *localName, THEMES_REPOSITORY, theme.DefaultCloner{themesDirectory})
 	checkAndPrintErr(err, "")
 
 	fmt.Println(color.GreenString("Theme successfully downloaded"))
