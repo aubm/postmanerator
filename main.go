@@ -39,9 +39,20 @@ func main() {
 
 	themesDirectory = os.Getenv("POSTMANERATOR_PATH")
 	if themesDirectory == "" {
+		var usrHomeDir string
 		usr, err := user.Current()
-		checkAndPrintErr(err, fmt.Sprintf("An error occured while trying to determine which directory to use for themes: %v", err))
-		themesDirectory = fmt.Sprintf("%v/.postmanerator", usr.HomeDir)
+		if err != nil {
+			if usrHomeDir = os.Getenv("HOME"); usrHomeDir == "" {
+				if usrHomeDir = os.Getenv("USERPROFILE"); usrHomeDir == "" {
+					checkAndPrintErr(err, `An error occured while trying to determine which directory to use for themes.
+As a workaround, you can define the POSTMANERATOR_PATH environement variable.
+Please consult the documentation here https://github.com/aubm/postmanerator and feel free to submit an issue.`)
+				}
+			}
+		} else {
+			usrHomeDir = usr.HomeDir
+		}
+		themesDirectory = fmt.Sprintf("%v/.postmanerator", usrHomeDir)
 	}
 	themesDirectory += "/themes"
 	if _, err := os.Stat(themesDirectory); os.IsNotExist(err) {
