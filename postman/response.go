@@ -28,18 +28,7 @@ type Response struct {
 	RunTests               bool        `json:"runTests"`
 	ID                     string      `json:"id"`
 	Name                   string      `json:"name"`
-	Request                struct {
-		URL     string `json:"url"`
-		Headers []struct {
-			Key     string `json:"key"`
-			Value   string `json:"value"`
-			Name    string `json:"name"`
-			Enabled bool   `json:"enabled"`
-		} `json:"headers"`
-		Data     string `json:"data"`
-		Method   string `json:"method"`
-		DataMode string `json:"dataMode"`
-	} `json:"request"`
+	Request                interface{} `json:"request"`
 }
 
 type ResponseHeader struct {
