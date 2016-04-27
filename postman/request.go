@@ -15,7 +15,7 @@ type Request struct {
 	Method           string        `json:"method"`
 	Data             []RequestData `json:"data"`
 	DataMode         string        `json:"dataMode"`
-	Version          int           `json:"version"`
+	Version          int64         `json:"version"`
 	Tests            string        `json:"tests"`
 	CurrentHelper    string        `json:"currentHelper"`
 	HelperAttributes interface{}   `json:"helperAttributes"`

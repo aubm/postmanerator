@@ -12,7 +12,7 @@ type Collection struct {
 	Description string      `json:"description"`
 	Order       []string    `json:"order"`
 	Folders     []Folder    `json:"folders"`
-	Timestamp   int         `json:"timestamp"`
+	Timestamp   int64       `json:"timestamp"`
 	Owner       interface{} `json:"owner"`
 	RemoteLink  string      `json:"remoteLink"`
 	Public      bool        `json:"public"`
