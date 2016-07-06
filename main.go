@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
+	"io"
 	"os"
 	"os/user"
 	"regexp"
@@ -19,6 +19,7 @@ import (
 )
 
 type Configuration struct {
+	Out                    io.Writer
 	CollectionFile         string
 	UsedTheme              string
 	OutputFile             string
@@ -38,6 +39,7 @@ var (
 )
 
 func init() {
+	config.Out = os.Stdout
 	flag.StringVar(&config.CollectionFile, "collection", "", "the postman exported collection JSON file")
 	flag.StringVar(&config.UsedTheme, "theme", "default", "the theme to use")
 	flag.StringVar(&config.OutputFile, "output", "", "the output file, default is stdout")
@@ -76,22 +78,26 @@ Please consult the documentation here https://github.com/aubm/postmanerator and 
 
 func main() {
 	if len(config.Args) == 0 {
-		defaultCommand(config)
+		if err := defaultCommand(config); err != nil {
+			checkAndPrintErr(err, "")
+		}
 		return
 	}
 
 	switch config.Args[0] {
 	case "themes":
+		var err error
 		if len(config.Args) >= 2 {
 			switch config.Args[1] {
 			case "get":
-				getTheme(config)
+				err = getTheme(config)
 			case "delete":
-				deleteTheme(config)
+				err = deleteTheme(config)
 			case "list":
-				listThemes(config)
+				err = listThemes(config)
 			}
 		}
+		checkAndPrintErr(err, "")
 		return
 	}
 
@@ -99,19 +105,21 @@ func main() {
 	checkAndPrintErr(emptyErr, fmt.Sprintf("Command '%v' not found, please see the documention at %v", strings.Join(config.Args, " "), documentationURL))
 }
 
-func defaultCommand(config Configuration) {
+func defaultCommand(config Configuration) error {
 	var (
 		err error
 		out *os.File = os.Stdout
 	)
 
 	if config.CollectionFile == "" {
-		checkAndPrintErr(emptyErr, "You must provide a collection using the -collection flag")
+		return errors.New("You must provide a collection using the -collection flag")
 	}
 
 	if config.OutputFile != "" {
 		out, err = os.Create(config.OutputFile)
-		checkAndPrintErr(err, fmt.Sprintf("Failed to create output: %v", err))
+		if err != nil {
+			return fmt.Errorf("Failed to create output: %v", err)
+		}
 		defer out.Close()
 	}
 
@@ -119,36 +127,40 @@ func defaultCommand(config Configuration) {
 		IgnoredRequestHeaders:  postman.HeadersList(config.IgnoredRequestHeaders.values),
 		IgnoredResponseHeaders: postman.HeadersList(config.IgnoredResponseHeaders.values),
 	})
-	checkAndPrintErr(err, fmt.Sprintf("Failed to parse collection file: %v", err))
+	if err != nil {
+		return fmt.Errorf("Failed to parse collection file: %v", err)
+	}
 
 	col.ExtractStructuresDefinition()
 
 	themePath, err := getThemePath(config)
 	if err != nil {
-		checkAndPrintErr(emptyErr, "The theme was not found")
+		return errors.New("The theme was not found")
 	}
 	themeFiles, err := theme.ListThemeFiles(themePath)
 	if err != nil {
-		checkAndPrintErr(err, "")
+		return err
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
-			color.Red("FAIL. %v\n", r)
+			config.Out.Write([]byte(color.RedString("FAIL. %v\n", r)))
 		}
 	}()
-	generate(out, themeFiles, col)
+	generate(config.Out, out, themeFiles, col)
 
 	if config.Watch {
-		watchDir(themePath, func() { generate(out, themeFiles, col) })
+		return watchDir(config.Out, themePath, func() { generate(config.Out, out, themeFiles, col) })
 	}
+
+	return nil
 }
 
 func getThemePath(config Configuration) (string, error) {
 	themePath, err := theme.GetThemePath(config.UsedTheme, config.ThemesDirectory)
 	if err != nil {
 		if ok, _ := regexp.MatchString(`\/|\\`, config.UsedTheme); ok == false {
-			fmt.Println(color.BlueString("Theme '%v' not found, trying to download it...", config.UsedTheme))
+			config.Out.Write([]byte(color.BlueString("Theme '%v' not found, trying to download it...\n", config.UsedTheme)))
 			if err := theme.GitClone(config.UsedTheme, "", THEMES_REPOSITORY, theme.DefaultCloner{config.ThemesDirectory}); err == nil {
 				return theme.GetThemePath(config.UsedTheme, config.ThemesDirectory)
 			}
@@ -158,31 +170,36 @@ func getThemePath(config Configuration) (string, error) {
 	return themePath, nil
 }
 
-func generate(out *os.File, themeFiles []string, col *postman.Collection) {
-	fmt.Print("Generating output ... ")
-	out.Truncate(0)
+func generate(out io.Writer, f *os.File, themeFiles []string, col *postman.Collection) {
+	out.Write([]byte("Generating output ... "))
+	f.Truncate(0)
 	templates := template.Must(template.New("").Funcs(helper.GetFuncMap()).ParseFiles(themeFiles...))
-	err := templates.ExecuteTemplate(out, "index.tpl", *col)
+	err := templates.ExecuteTemplate(f, "index.tpl", *col)
 	if err != nil {
-		color.Red("FAIL. %v\n", err)
+		out.Write([]byte(color.RedString("FAIL. %v\n", err)))
 		return
 	}
-	fmt.Print(color.GreenString("SUCCESS.\n"))
+	out.Write([]byte(color.GreenString("SUCCESS.\n")))
 }
 
-func watchDir(dir string, action func()) {
+func watchDir(out io.Writer, dir string, action func()) error {
 	watcher, err := fsnotify.NewWatcher()
-	checkAndPrintErr(err, fmt.Sprintf("Failed to create file watcher: %v", err))
+	if err != nil {
+		return fmt.Errorf("Failed to create file watcher: %v", err)
+	}
 	defer watcher.Close()
 
 	done := make(chan bool)
+	defer func() {
+		<-done
+	}()
 
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				color.Red("FAIL. %v\n", r)
+				out.Write([]byte(color.RedString("FAIL. %v\n", r)))
 			}
-			watchDir(dir, action)
+			watchDir(out, dir, action)
 		}()
 
 		for {
@@ -192,15 +209,16 @@ func watchDir(dir string, action func()) {
 					action()
 				}
 			case err := <-watcher.Error:
-				log.Printf("FAIL. %v\n", err)
+				out.Write([]byte(color.RedString("FAIL. %v\n", err)))
 			}
 		}
 	}()
 
-	err = watcher.Watch(dir)
-	checkAndPrintErr(err, fmt.Sprintf("Failed to watch theme directory: %v", err))
+	if err := watcher.Watch(dir); err != nil {
+		return fmt.Errorf("Failed to watch theme directory: %v", err)
+	}
 
-	<-done
+	return nil
 }
 
 func checkAndPrintErr(err error, msg string) {
@@ -228,29 +246,32 @@ func (sf *StringsFlag) Set(value string) error {
 	return nil
 }
 
-func getTheme(config Configuration) {
+func getTheme(config Configuration) error {
 	if len(config.Args) < 3 {
-		checkAndPrintErr(emptyErr, "You must provide the name or the URL of the theme you want to download")
+		return errors.New("You must provide the name or the URL of the theme you want to download")
 	}
 
-	err := theme.GitClone(config.Args[2], config.LocalName, THEMES_REPOSITORY, theme.DefaultCloner{config.ThemesDirectory})
-	checkAndPrintErr(err, "")
-
-	fmt.Println(color.GreenString("Theme successfully downloaded"))
-}
-
-func deleteTheme(config Configuration) {
-	if len(config.Args) < 3 {
-		checkAndPrintErr(emptyErr, "You must provide the name of the theme you want to delete")
+	if err := theme.GitClone(config.Args[2], config.LocalName, THEMES_REPOSITORY, theme.DefaultCloner{config.ThemesDirectory}); err != nil {
+		return err
 	}
 
-	err := theme.Delete(config.Args[2], config.ThemesDirectory)
-	checkAndPrintErr(err, "")
-
-	fmt.Println(color.GreenString("Theme successfully deleted"))
+	config.Out.Write([]byte(color.GreenString("Theme successfully downloaded")))
+	return nil
 }
 
-func listThemes(config Configuration) {
-	err := theme.ListThemes(os.Stdout, config.ThemesDirectory)
-	checkAndPrintErr(err, "")
+func deleteTheme(config Configuration) error {
+	if len(config.Args) < 3 {
+		return errors.New("You must provide the name of the theme you want to delete")
+	}
+
+	if err := theme.Delete(config.Args[2], config.ThemesDirectory); err != nil {
+		return err
+	}
+
+	config.Out.Write([]byte(color.GreenString("Theme successfully deleted")))
+	return nil
+}
+
+func listThemes(config Configuration) error {
+	return theme.ListThemes(os.Stdout, config.ThemesDirectory)
 }
