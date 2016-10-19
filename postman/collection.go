@@ -1,7 +1,9 @@
 package postman
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"strings"
 )
@@ -27,6 +29,12 @@ func CollectionFromFile(file string, options CollectionOptions) (*Collection, er
 	buf, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
+	}
+
+	if options.EnvironmentVariables != nil {
+		for k, v := range options.EnvironmentVariables {
+			buf = bytes.Replace(buf, []byte(fmt.Sprintf("{{%v}}", k)), []byte(v), -1)
+		}
 	}
 
 	err = json.Unmarshal(buf, col)
@@ -70,6 +78,7 @@ func CollectionFromFile(file string, options CollectionOptions) (*Collection, er
 type CollectionOptions struct {
 	IgnoredRequestHeaders  HeadersList
 	IgnoredResponseHeaders HeadersList
+	EnvironmentVariables   map[string]string
 }
 
 type HeadersList []string

@@ -33,6 +33,12 @@ The collection is a JSON file generated from the Postman UI. You can get more in
 
 Use the `-collection=/path/to/collection.json` option to provide the collection to Postmanerator.
 
+### Provide an environment file
+
+The environment file is a JSON file generated from the Postman UI. You can get more information about Postman environments from the [official documentation](https://www.getpostman.com/docs/environments).
+
+Use the `-environment=/path/to/environment.json` option to provide the environment to Postmanerator.
+
 ### Provide a theme
 
 By default, Postmanerator will use its `default` theme, but you can change it by using the `-theme=theme_name` option.

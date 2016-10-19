@@ -21,6 +21,7 @@ import (
 type Configuration struct {
 	Out                    io.Writer
 	CollectionFile         string
+	EnvironmentFile        string
 	UsedTheme              string
 	OutputFile             string
 	Watch                  bool
@@ -41,6 +42,7 @@ var (
 func init() {
 	config.Out = os.Stdout
 	flag.StringVar(&config.CollectionFile, "collection", "", "the postman exported collection JSON file")
+	flag.StringVar(&config.EnvironmentFile, "environment", "", "the postman exported environment JSON file")
 	flag.StringVar(&config.UsedTheme, "theme", "default", "the theme to use")
 	flag.StringVar(&config.OutputFile, "output", "", "the output file, default is stdout")
 	flag.BoolVar(&config.Watch, "watch", false, "automatically regenerate the output when the theme changes")
@@ -115,6 +117,14 @@ func defaultCommand(config Configuration) error {
 		return errors.New("You must provide a collection using the -collection flag")
 	}
 
+	var env map[string]string
+	if config.EnvironmentFile != "" {
+		env, err = postman.EnvironmentFromFile(config.EnvironmentFile)
+		if err != nil {
+			return fmt.Errorf("Failed to open environment file: %v", err)
+		}
+	}
+
 	if config.OutputFile != "" {
 		out, err = os.Create(config.OutputFile)
 		if err != nil {
@@ -126,6 +136,7 @@ func defaultCommand(config Configuration) error {
 	col, err := postman.CollectionFromFile(config.CollectionFile, postman.CollectionOptions{
 		IgnoredRequestHeaders:  postman.HeadersList(config.IgnoredRequestHeaders.values),
 		IgnoredResponseHeaders: postman.HeadersList(config.IgnoredResponseHeaders.values),
+		EnvironmentVariables:   env,
 	})
 	if err != nil {
 		return fmt.Errorf("Failed to parse collection file: %v", err)
