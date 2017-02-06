@@ -47,7 +47,7 @@ func findResponse(req postman.Request, name string) *postman.Response {
 }
 
 func markdown(input string) string {
-	return string(blackfriday.MarkdownBasic([]byte(input)))
+	return string(blackfriday.MarkdownCommon([]byte(input)))
 }
 
 func indentJSON(input string) string {
