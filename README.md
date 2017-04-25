@@ -107,8 +107,8 @@ You can either specify the name of one of the themes that are indexed in the [of
 
 Official themes previews are accessible here :
 - [default](http://aubm.github.io/Books-API/)
-- [hu](<< UPDATE THIS TO RAW GIT URL >>)
-- [markdown](<< UPDATE THIS TO RAW GIT URL >>)
+- [hu](https://cdn.rawgit.com/antoinerey/postmanerator/0082d47f499219de3243e76f8fe1332bfa60b585/demos/hu.html)
+- [markdown](https://cdn.rawgit.com/antoinerey/postmanerator/0082d47f499219de3243e76f8fe1332bfa60b585/demos/markdown.html)
 
 ```bash
 postmanerator themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'markdown'
