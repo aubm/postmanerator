@@ -1,0 +1,271 @@
+# Cats API
+
+## General notes
+
+Tu autem, Fanni, quod mihi tantum tribui dicis quantum ego nec adgnosco nec postulo, facis amice; sed, ut mihi videris, non recte iudicas de Catone; aut enim nemo, quod quidem magis credo, aut si quisquam, ille sapiens fuit. Quo modo, ut alia omittam, mortem filii tulit! memineram Paulum, videram Galum, sed hi in pueris, Cato in perfecto et spectato viro.
+
+Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur, montuosis etiam et silvestribus, in quibus diutius commorati sumus.
+
+
+
+## API structures
+
+
+
+### Dog
+
+A greater animal
+
+<table class="table table-bordered">
+
+<tr>
+    <th>id</th>
+    <td>int</td>
+    <td>A unique identifier for the dog</td>
+</tr>
+
+<tr>
+    <th>color</th>
+    <td>string</td>
+    <td>The color of the dog</td>
+</tr>
+
+<tr>
+    <th>name</th>
+    <td>string</td>
+    <td>The name of the dog</td>
+</tr>
+
+</table>
+
+
+
+### Cat
+
+A great animal
+
+<table class="table table-bordered">
+
+<tr>
+    <th>id</th>
+    <td>int</td>
+    <td>A unique identifier for the cat</td>
+</tr>
+
+<tr>
+    <th>color</th>
+    <td>string</td>
+    <td>The color of the cat</td>
+</tr>
+
+<tr>
+    <th>name</th>
+    <td>string</td>
+    <td>The name of the cat</td>
+</tr>
+
+</table>
+
+
+
+
+
+## API Details
+
+
+### Cats
+
+Accedebant enim eius asperitati, ubi inminuta vel laesa amplitudo imperii dicebatur, et iracundae suspicionum quantitati proximorum cruentae blanditiae exaggerantium incidentia et dolere inpendio simulantium, si principis periclitetur vita, a cuius salute velut filo pendere statum orbis terrarum fictis vocibus exclamabant.
+
+Quod cum ita sit, paucae domus studiorum seriis cultibus antea celebratae nunc ludibriis ignaviae torpentis exundant, vocali sonu, perflabili tinnitu fidium resultantes. denique pro philosopho cantor et in locum oratoris doctor artium ludicrarum accitur et bybliothecis sepulcrorum ritu in perpetuum clausis organa fabricantur hydraulica, et lyrae ad speciem carpentorum ingentes tibiaeque et histrionici gestus instrumenta non levia.
+
+
+
+
+
+### Create a new cat
+
+Quae dum ita struuntur, indicatum est apud Tyrum indumentum regale textum occulte, incertum quo locante vel cuius usibus apparatum. ideoque rector provinciae tunc pater Apollinaris eiusdem nominis ut conscius ductus est aliique congregati sunt ex diversis civitatibus multi, qui atrocium criminum ponderibus urgebantur.
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>POST</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/cats</td></tr>
+</table>
+
+
+
+#### Response
+
+<table>
+    <tr><th>Code</th><td>201</td></tr>
+    <tr><th>Status</th><td>Created</td></tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+### Get all cats
+
+Sed si ille hac tam eximia fortuna propter utilitatem rei publicae frui non properat, ut omnia illa conficiat, quid ego, senator, facere debeo, quem, etiamsi ille aliud vellet, rei publicae consulere oporteret?
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>GET</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/cats</td></tr>
+</table>
+
+
+
+#### Response
+
+<table>
+    <tr><th>Code</th><td>200</td></tr>
+    <tr><th>Status</th><td>OK</td></tr>
+</table>
+
+
+**Example** :
+
+```
+[
+    {
+        "id": "56cc8a8228a4dbe55ca6e6ec",
+        "name": "Doctor Frankeinstein",
+        "color": "brown"
+    }
+]
+```
+
+
+
+
+
+
+
+
+
+
+### Get one cat
+
+Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>GET</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/cats/{{catId}}</td></tr>
+</table>
+
+
+
+#### Response
+
+<table>
+    <tr><th>Code</th><td>200</td></tr>
+    <tr><th>Status</th><td>OK</td></tr>
+</table>
+
+
+**Example** :
+
+```
+{
+    "id": "56cc8a8228a4dbe55ca6e6ec",
+    "name": "Doctor Frankeinstein",
+    "color": "brown"
+}
+```
+
+
+
+
+
+
+
+
+
+
+### Delete one cat
+
+Homines enim eruditos et sobrios ut infaustos et inutiles vitant, eo quoque accedente quod et nomenclatores adsueti haec et talia venditare, mercede accepta lucris quosdam et prandiis inserunt subditicios ignobiles et obscuros.
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>DELETE</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/cats/{{catId}}</td></tr>
+</table>
+
+
+
+#### Response
+
+<table>
+    <tr><th>Code</th><td>204</td></tr>
+    <tr><th>Status</th><td>No Content</td></tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+### Get zero cats
+
+Quam ob rem cave Catoni anteponas ne istum quidem ipsum, quem Apollo, ut ais, sapientissimum iudicavit; huius enim facta, illius dicta laudantur. De me autem, ut iam cum utroque vestrum loquar, sic habetote.
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>GET</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/cats</td></tr>
+</table>
+
+
+
+
+
+
+
+
+### Dogs
+
+
+
+
+
+
+
+### Get one dog
+
+Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.
+
+#### Request
+
+<table>
+    <tr><th>Method</th><td>GET</td></tr>
+    <tr><th>URL</th><td>http://{{domain}}/api/dogs/{{dogId}}</td></tr>
+</table>
+
+
+
+
+
+
+
+

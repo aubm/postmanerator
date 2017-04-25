@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cats API</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/darkula.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style>body {
+    position: relative;
+}
+
+h1 {
+    margin-top: 5px;
+}
+
+h1, h2, h3, h4 {
+    color: #2b2b2b;
+}
+
+h2:after {
+    content: ' ';
+}
+
+h5 {
+    font-weight: bold;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    display: none;
+    position: absolute;
+    margin-left: 8px;
+}
+
+h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a {
+    color: #a5a5a5;
+    display: initial;
+}
+
+.nav.nav-tabs > li > a {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.tab-content {
+    padding-top: 8px;
+}
+
+.table {
+    margin-bottom: 8px;
+}
+
+pre {
+    border-radius: 0px;
+    border: none;
+}
+
+pre code {
+    margin: -9.5px;
+}
+
+.request {
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.response-text-sample {
+    padding: 0px !important;
+}
+
+.response-text-sample pre {
+    margin-bottom: 0px;
+}
+
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 250px;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #2b2b2b;
+    padding-top: 20px;
+}
+
+#sidebar-wrapper ul {
+    width: 250px;
+}
+
+#sidebar-wrapper ul li {
+    margin-right: 10px;
+}
+
+#sidebar-wrapper ul li a:hover {
+    background: inherit;
+    text-decoration: none;
+}
+
+#sidebar-wrapper ul li a {
+    display: block;
+    color: #ECF0F1;
+    padding: 6px 15px;
+}
+
+#sidebar-wrapper ul li ul {
+    padding-left: 25px;
+}
+
+#sidebar-wrapper ul li ul li a {
+    padding: 1px 0px;
+}
+
+#sidebar-wrapper ul li a:hover,
+#sidebar-wrapper ul li a:focus {
+    color: #e0c46c;
+    border-right: solid 1px #e0c46c;
+}
+
+#sidebar-wrapper ul li.active > a {
+    color: #e0c46c;
+    border-right: solid 3px #e0c46c;
+}
+
+#sidebar-wrapper ul li:not(.active) ul {
+    display: none;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px 15px 15px 250px;
+}
+</style>
+</head>
+<body data-spy="scroll" data-target=".scrollspy">
+<div id="sidebar-wrapper">
+    <div class="scrollspy">
+    <ul id="main-menu" data-spy="affix" class="nav">
+        <li>
+            <a href="#doc-general-notes">General notes</a>
+        </li>
+        
+        <li>
+            <a href="#doc-api-structures">API structures</a>
+            <ul>
+                
+                <li>
+                    <a href="#struct-Dog">Dog</a>
+                </li>
+                
+                <li>
+                    <a href="#struct-Cat">Cat</a>
+                </li>
+                
+            </ul>
+        </li>
+        
+        <li>
+            <a href="#doc-api-detail">API detail</a>
+        </li>
+         
+        <li>
+            <a href="#folder-cats">Cats</a>
+            <ul>
+                 
+                <li>
+                    <a href="#request-cats-create-a-new-cat">Create a new cat</a>
+                </li>
+                  
+                <li>
+                    <a href="#request-cats-get-all-cats">Get all cats</a>
+                </li>
+                  
+                <li>
+                    <a href="#request-cats-get-one-cat">Get one cat</a>
+                </li>
+                  
+                <li>
+                    <a href="#request-cats-delete-one-cat">Delete one cat</a>
+                </li>
+                  
+                <li>
+                    <a href="#request-cats-get-zero-cats">Get zero cats</a>
+                </li>
+                 
+            </ul>
+        </li>
+          
+        <li>
+            <a href="#folder-dogs">Dogs</a>
+            <ul>
+                 
+                <li>
+                    <a href="#request-dogs-get-one-dog">Get one dog</a>
+                </li>
+                 
+            </ul>
+        </li>
+         
+    </ul>
+</div>
+
+</div>
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Cats API</h1>
+
+                <h2 id="doc-general-notes">
+                    General notes
+                    <a href="#doc-general-notes"><i class="glyphicon glyphicon-link"></i></a>
+                </h2>
+
+                <p>Tu autem, Fanni, quod mihi tantum tribui dicis quantum ego nec adgnosco nec postulo, facis amice; sed, ut mihi videris, non recte iudicas de Catone; aut enim nemo, quod quidem magis credo, aut si quisquam, ille sapiens fuit. Quo modo, ut alia omittam, mortem filii tulit! memineram Paulum, videram Galum, sed hi in pueris, Cato in perfecto et spectato viro.</p>
+
+<p>Novitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur, montuosis etiam et silvestribus, in quibus diutius commorati sumus.</p>
+
+
+                
+                <h2 id="doc-api-structures">
+                    API structures
+                    <a href="#doc-api-structures"><i class="glyphicon glyphicon-link"></i></a>
+                </h2>
+
+                
+
+                    <h3 id="struct-Dog">
+                        Dog
+                        <a href="#struct-Dog"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <p>A greater animal</p>
+
+                    <table class="table table-bordered">
+                    
+                        <tr>
+                            <th>id</th>
+                            <td>int</td>
+                            <td>A unique identifier for the dog</td>
+                        </tr>
+                    
+                        <tr>
+                            <th>color</th>
+                            <td>string</td>
+                            <td>The color of the dog</td>
+                        </tr>
+                    
+                        <tr>
+                            <th>name</th>
+                            <td>string</td>
+                            <td>The name of the dog</td>
+                        </tr>
+                    
+                    </table>
+
+                
+
+                    <h3 id="struct-Cat">
+                        Cat
+                        <a href="#struct-Cat"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <p>A great animal</p>
+
+                    <table class="table table-bordered">
+                    
+                        <tr>
+                            <th>id</th>
+                            <td>int</td>
+                            <td>A unique identifier for the cat</td>
+                        </tr>
+                    
+                        <tr>
+                            <th>color</th>
+                            <td>string</td>
+                            <td>The color of the cat</td>
+                        </tr>
+                    
+                        <tr>
+                            <th>name</th>
+                            <td>string</td>
+                            <td>The name of the cat</td>
+                        </tr>
+                    
+                    </table>
+
+                
+
+                
+
+                <h2 id="doc-api-detail">
+                    API detail
+                    <a href="#doc-api-detail"><i class="glyphicon glyphicon-link"></i></a>
+                </h2>
+
+                 
+                <div class="endpoints-group">
+                    <h3 id="folder-cats">
+                        Cats
+                        <a href="#folder-cats"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <div><p>Accedebant enim eius asperitati, ubi inminuta vel laesa amplitudo imperii dicebatur, et iracundae suspicionum quantitati proximorum cruentae blanditiae exaggerantium incidentia et dolere inpendio simulantium, si principis periclitetur vita, a cuius salute velut filo pendere statum orbis terrarum fictis vocibus exclamabant.</p>
+
+<p>Quod cum ita sit, paucae domus studiorum seriis cultibus antea celebratae nunc ludibriis ignaviae torpentis exundant, vocali sonu, perflabili tinnitu fidium resultantes. denique pro philosopho cantor et in locum oratoris doctor artium ludicrarum accitur et bybliothecis sepulcrorum ritu in perpetuum clausis organa fabricantur hydraulica, et lyrae ad speciem carpentorum ingentes tibiaeque et histrionici gestus instrumenta non levia.</p>
+</div>
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-cats-create-a-new-cat">
+                                Create a new cat
+                                <a href="#request-cats-create-a-new-cat"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Quae dum ita struuntur, indicatum est apud Tyrum indumentum regale textum occulte, incertum quo locante vel cuius usibus apparatum. ideoque rector provinciae tunc pater Apollinaris eiusdem nominis ut conscius ductus est aliique congregati sunt ex diversis civitatibus multi, qui atrocium criminum ponderibus urgebantur.</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-create-a-new-cat-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-create-a-new-cat-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-create-a-new-cat-example-curl">
+                                        <pre><code class="hljs curl">curl -X POST -d '{
+    "name": "Doctor Frankeinstein",
+    "color": "brown"
+}' "http://{{domain}}/api/cats"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-create-a-new-cat-example-http">
+                                        <pre><code class="hljs http">POST /api/cats HTTP/1.1
+Host: {{domain}}
+
+{
+    "name": "Doctor Frankeinstein",
+    "color": "brown"
+}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    
+                                    <li role="presentation" class="active">
+                                        <a href="#request-create-a-new-cat-responses-70cc5991-fbbf-791f-902b-ecfe4b37df35" data-toggle="tab">
+                                            
+                                                Response
+                                            
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    
+                                    <div class="tab-pane active" id="request-create-a-new-cat-responses-70cc5991-fbbf-791f-902b-ecfe4b37df35">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width: 20%;">Status</th><td>201 Created</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Length</th><td>0</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Type</th><td>text/plain; charset=utf-8</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Date</th><td>Tue, 23 Feb 2016 16:36:18 GMT</td></tr>
+                                            
+                                            
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-cats-get-all-cats">
+                                Get all cats
+                                <a href="#request-cats-get-all-cats"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Sed si ille hac tam eximia fortuna propter utilitatem rei publicae frui non properat, ut omnia illa conficiat, quid ego, senator, facere debeo, quem, etiamsi ille aliud vellet, rei publicae consulere oporteret?</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-get-all-cats-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-get-all-cats-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-get-all-cats-example-curl">
+                                        <pre><code class="hljs curl">curl -X GET "http://{{domain}}/api/cats"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-get-all-cats-example-http">
+                                        <pre><code class="hljs http">GET /api/cats HTTP/1.1
+Host: {{domain}}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    
+                                    <li role="presentation" class="active">
+                                        <a href="#request-get-all-cats-responses-91ee2389-3d6d-a56a-83a9-dbb713a35e7c" data-toggle="tab">
+                                            
+                                                Response
+                                            
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    
+                                    <div class="tab-pane active" id="request-get-all-cats-responses-91ee2389-3d6d-a56a-83a9-dbb713a35e7c">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Length</th><td>81</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Date</th><td>Tue, 23 Feb 2016 16:36:33 GMT</td></tr>
+                                            
+                                            
+                                                
+                                                <tr><td class="response-text-sample" colspan="2">
+                                                    <pre><code>[
+    {
+        "id": "56cc8a8228a4dbe55ca6e6ec",
+        "name": "Doctor Frankeinstein",
+        "color": "brown"
+    }
+]</code></pre>
+                                                </td></tr>
+                                                
+                                            
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-cats-get-one-cat">
+                                Get one cat
+                                <a href="#request-cats-get-one-cat"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-get-one-cat-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-get-one-cat-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-get-one-cat-example-curl">
+                                        <pre><code class="hljs curl">curl -X GET "http://{{domain}}/api/cats/{{catId}}"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-get-one-cat-example-http">
+                                        <pre><code class="hljs http">GET /api/cats/%7B%7BcatId%7D%7D HTTP/1.1
+Host: {{domain}}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    
+                                    <li role="presentation" class="active">
+                                        <a href="#request-get-one-cat-responses-09bf9394-41e6-ef09-1868-3cd789ebb020" data-toggle="tab">
+                                            
+                                                Response
+                                            
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    
+                                    <div class="tab-pane active" id="request-get-one-cat-responses-09bf9394-41e6-ef09-1868-3cd789ebb020">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Length</th><td>79</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Content-Type</th><td>application/json</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Date</th><td>Tue, 23 Feb 2016 16:36:44 GMT</td></tr>
+                                            
+                                            
+                                                
+                                                <tr><td class="response-text-sample" colspan="2">
+                                                    <pre><code>{
+    "id": "56cc8a8228a4dbe55ca6e6ec",
+    "name": "Doctor Frankeinstein",
+    "color": "brown"
+}</code></pre>
+                                                </td></tr>
+                                                
+                                            
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-cats-delete-one-cat">
+                                Delete one cat
+                                <a href="#request-cats-delete-one-cat"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Homines enim eruditos et sobrios ut infaustos et inutiles vitant, eo quoque accedente quod et nomenclatores adsueti haec et talia venditare, mercede accepta lucris quosdam et prandiis inserunt subditicios ignobiles et obscuros.</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-delete-one-cat-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-delete-one-cat-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-delete-one-cat-example-curl">
+                                        <pre><code class="hljs curl">curl -X DELETE "http://{{domain}}/api/cats/{{catId}}"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-delete-one-cat-example-http">
+                                        <pre><code class="hljs http">DELETE /api/cats/%7B%7BcatId%7D%7D HTTP/1.1
+Host: {{domain}}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    
+                                    <li role="presentation" class="active">
+                                        <a href="#request-delete-one-cat-responses-a187d805-0564-c12f-7817-c4356dcfc7ba" data-toggle="tab">
+                                            
+                                                Response
+                                            
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                    
+                                    <div class="tab-pane active" id="request-delete-one-cat-responses-a187d805-0564-c12f-7817-c4356dcfc7ba">
+                                        <table class="table table-bordered">
+                                            <tr><th style="width: 20%;">Status</th><td>204 No Content</td></tr>
+                                            
+                                            <tr><th style="width: 20%;">Date</th><td>Tue, 23 Feb 2016 16:36:57 GMT</td></tr>
+                                            
+                                            
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-cats-get-zero-cats">
+                                Get zero cats
+                                <a href="#request-cats-get-zero-cats"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Quam ob rem cave Catoni anteponas ne istum quidem ipsum, quem Apollo, ut ais, sapientissimum iudicavit; huius enim facta, illius dicta laudantur. De me autem, ut iam cum utroque vestrum loquar, sic habetote.</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-get-zero-cats-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-get-zero-cats-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-get-zero-cats-example-curl">
+                                        <pre><code class="hljs curl">curl -X GET "http://{{domain}}/api/cats"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-get-zero-cats-example-http">
+                                        <pre><code class="hljs http">GET /api/cats HTTP/1.1
+Host: {{domain}}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                </div>
+                  
+                <div class="endpoints-group">
+                    <h3 id="folder-dogs">
+                        Dogs
+                        <a href="#folder-dogs"><i class="glyphicon glyphicon-link"></i></a>
+                    </h3>
+
+                    <div></div>
+
+                    
+
+                        
+                        <div class="request">
+
+                            <h4 id="request-dogs-get-one-dog">
+                                Get one dog
+                                <a href="#request-dogs-get-one-dog"><i class="glyphicon glyphicon-link"></i></a>
+                            </h4>
+
+                            <div><p>Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.</p>
+</div>
+
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#request-get-one-dog-example-curl" data-toggle="tab">Curl</a></li>
+                                    <li role="presentation"><a href="#request-get-one-dog-example-http" data-toggle="tab">HTTP</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="request-get-one-dog-example-curl">
+                                        <pre><code class="hljs curl">curl -X GET "http://{{domain}}/api/dogs/{{dogId}}"</code></pre>
+                                    </div>
+                                    <div class="tab-pane" id="request-get-one-dog-example-http">
+                                        <pre><code class="hljs http">GET /api/dogs/%7B%7BdogId%7D%7D HTTP/1.1
+Host: {{domain}}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            <hr>
+                        </div>
+                        
+
+                    
+
+                </div>
+                 
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

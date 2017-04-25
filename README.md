@@ -105,6 +105,11 @@ The list of available themes will be printed out to the standard output. By defa
 By now, you probably only have the `default` theme available, the `postmanerator themes get` command allows you download a new existing theme.
 You can either specify the name of one of the themes that are indexed in the [official themes repository](https://github.com/aubm/postmanerator-themes), or either specify a full URL pointing to git repository. Moreover the `-local-name` option allows you to change the name of your local copy of the theme. Please see the following examples.
 
+Official themes previews are accessible here :
+- [default](http://aubm.github.io/Books-API/)
+- [hu](<< UPDATE THIS TO RAW GIT URL >>)
+- [markdown](<< UPDATE THIS TO RAW GIT URL >>)
+
 ```bash
 postmanerator themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'markdown'
 postmanerator -local-name="my-markdown" themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'my-markdown'
