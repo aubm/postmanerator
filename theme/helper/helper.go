@@ -100,7 +100,12 @@ func curlSnippet(request postman.Request) string {
 }
 
 func httpSnippet(request postman.Request) (httpSnippet string) {
-	parsedURL := request.ParsedURL()
+	parsedURL, err := request.ParsedURL()
+	if err != nil {
+		httpSnippet = err.Error()
+		return
+	}
+
 	httpSnippet += fmt.Sprintf(`%v %v HTTP/1.1
 Host: %v`, request.Method, parsedURL.RequestURI(), parsedURL.Host)
 

@@ -1,7 +1,7 @@
 package postman
 
 import (
-	"log"
+	"fmt"
 	"net/url"
 	"strings"
 )
@@ -49,10 +49,10 @@ func (req Request) Headers() (headers []Header) {
 	return
 }
 
-func (req Request) ParsedURL() *url.URL {
+func (req Request) ParsedURL() (*url.URL, error) {
 	parsedURL, err := url.Parse(req.URL)
 	if err != nil {
-		log.Fatalf("Tried to parse an invalid URL: %v", req.URL)
+		return nil, fmt.Errorf("failed to parse url\n%v", err)
 	}
-	return parsedURL
+	return parsedURL, nil
 }
