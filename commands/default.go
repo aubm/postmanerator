@@ -20,6 +20,10 @@ type Default struct {
 	Config *configuration.Configuration `inject:""`
 }
 
+func (c *Default) CanHandle(name string) bool {
+	return name == CmdDefault
+}
+
 func (c *Default) Do() error {
 	var (
 		err error

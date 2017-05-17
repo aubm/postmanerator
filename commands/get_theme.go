@@ -12,6 +12,10 @@ type GetTheme struct {
 	Config *configuration.Configuration `inject:""`
 }
 
+func (c *GetTheme) CanHandle(name string) bool {
+	return name == CmdThemesGet
+}
+
 func (c *GetTheme) Do() error {
 	if len(c.Config.Args) < 3 {
 		return errors.New("You must provide the name or the URL of the theme you want to download")

@@ -12,6 +12,10 @@ type DeleteTheme struct {
 	Config *configuration.Configuration `inject:""`
 }
 
+func (c *DeleteTheme) CanHandle(name string) bool {
+	return name == CmdThemesDelete
+}
+
 func (c *DeleteTheme) Do() error {
 	if len(c.Config.Args) < 3 {
 		return errors.New("You must provide the name of the theme you want to delete")

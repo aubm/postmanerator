@@ -10,22 +10,14 @@ import (
 	"github.com/fatih/color"
 )
 
-const (
-	documentationUrl = "https://github.com/aubm/postmanerator"
-	cmdDefault       = "cmd_default"
-	cmdThemesList    = "cmd_themes_list"
-	cmdThemesGet     = "cmd_themes_get"
-	cmdThemesDelete  = "cmd_themes_delete"
-	cmdUnknown       = "cmd_unknown"
-)
-
 var (
 	config             = configuration.Config
-	errUnknownCmd      = fmt.Errorf(`Command not found, please see the documentation at %s`, documentationUrl)
-	defaultCommand     = commands.Default{}
-	getThemeCommand    = commands.GetTheme{}
-	deleteThemeCommand = commands.DeleteTheme{}
-	listThemesCommand  = commands.ListThemes{}
+	errUnknownCmd      = fmt.Errorf("Command not found, please see the documentation at https://github.com/aubm/postmanerator")
+	defaultCommand     = &commands.Default{}
+	getThemeCommand    = &commands.GetTheme{}
+	deleteThemeCommand = &commands.DeleteTheme{}
+	listThemesCommand  = &commands.ListThemes{}
+	availableCommands  = []commands.Command{}
 )
 
 func init() {
@@ -33,9 +25,15 @@ func init() {
 }
 
 func _init() error {
-	if err := inject.Populate(&config, &defaultCommand, &getThemeCommand, &deleteThemeCommand); err != nil {
+	if err := inject.Populate(&config, defaultCommand, getThemeCommand, deleteThemeCommand, listThemesCommand); err != nil {
 		return fmt.Errorf("app initialization failed: %v", err)
 	}
+	availableCommands = append(availableCommands,
+		defaultCommand,
+		getThemeCommand,
+		deleteThemeCommand,
+		listThemesCommand,
+	)
 	return nil
 }
 
@@ -45,42 +43,36 @@ func main() {
 }
 
 func _main() (err error) {
-	switch evaluateUserCommand() {
-	case cmdDefault:
-		err = defaultCommand.Do()
-	case cmdThemesGet:
-		err = getThemeCommand.Do()
-	case cmdThemesDelete:
-		err = deleteThemeCommand.Do()
-	case cmdThemesList:
-		err = listThemesCommand.Do()
-	default:
-		err = errUnknownCmd
+	userCommand := evaluateUserCommand()
+	for _, availableCommand := range availableCommands {
+		if availableCommand.CanHandle(userCommand) {
+			return availableCommand.Do()
+		}
 	}
-	return
+	return errUnknownCmd
 }
 
 func evaluateUserCommand() string {
 	if len(config.Args) == 0 {
-		return cmdDefault
+		return commands.CmdDefault
 	}
 
 	switch config.Args[0] {
 	case "themes":
 		if len(config.Args) < 2 {
-			return cmdThemesList
+			return commands.CmdThemesList
 		}
 		switch config.Args[1] {
 		case "get":
-			return cmdThemesGet
+			return commands.CmdThemesGet
 		case "delete":
-			return cmdThemesDelete
+			return commands.CmdThemesDelete
 		case "list":
-			return cmdThemesList
+			return commands.CmdThemesList
 		}
 	}
 
-	return cmdUnknown
+	return commands.CmdUnknown
 }
 
 func checkAndPrintErr(err error) {

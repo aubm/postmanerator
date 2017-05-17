@@ -35,8 +35,8 @@ const (
 var (
 	InitErr error
 	Config  = Configuration{
-		Out:             os.Stdout,
-		ThemesDirectory: defaultThemesRepository,
+		Out:              os.Stdout,
+		ThemesRepository: defaultThemesRepository,
 	}
 	errThemesNoDirectory = errors.New(`An error occurred while trying to determine which directory to use for themes.
 As a workaround, you can define the POSTMANERATOR_PATH environment variable.
