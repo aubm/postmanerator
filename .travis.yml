@@ -8,7 +8,7 @@ before_install:
 - go get github.com/mattn/goveralls
 - go get golang.org/x/tools/cmd/cover
 script:
-  - ./scripts/coverage --coveralls
+  - ./.scripts/coverage --coveralls
 before_deploy:
 - go get github.com/mitchellh/gox
 - gox
