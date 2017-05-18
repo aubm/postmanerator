@@ -2,17 +2,20 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/aubm/postmanerator/configuration"
-	"github.com/aubm/postmanerator/theme"
 	"github.com/fatih/color"
 )
 
 type DeleteTheme struct {
 	Config *configuration.Configuration `inject:""`
+	Themes interface {
+		Delete(theme string) error
+	} `inject:""`
 }
 
-func (c *DeleteTheme) CanHandle(name string) bool {
+func (c *DeleteTheme) Is(name string) bool {
 	return name == CmdThemesDelete
 }
 
@@ -21,10 +24,10 @@ func (c *DeleteTheme) Do() error {
 		return errors.New("You must provide the name of the theme you want to delete")
 	}
 
-	if err := theme.Delete(c.Config.Args[2], c.Config.ThemesDirectory); err != nil {
+	if err := c.Themes.Delete(c.Config.Args[2]); err != nil {
 		return err
 	}
 
-	c.Config.Out.Write([]byte(color.GreenString("Theme successfully deleted")))
+	fmt.Fprintln(c.Config.Out, color.GreenString("Theme successfully deleted"))
 	return nil
 }

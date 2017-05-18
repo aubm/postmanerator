@@ -1,20 +1,31 @@
 package commands
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/aubm/postmanerator/configuration"
-	"github.com/aubm/postmanerator/theme"
 )
 
 type ListThemes struct {
 	Config *configuration.Configuration `inject:""`
+	Themes interface {
+		List() ([]string, error)
+	} `inject:""`
 }
 
-func (c *ListThemes) CanHandle(name string) bool {
+func (c *ListThemes) Is(name string) bool {
 	return name == CmdThemesList
 }
 
 func (c *ListThemes) Do() error {
-	return theme.ListThemes(os.Stdout, c.Config.ThemesDirectory)
+	themeList, err := c.Themes.List()
+	if err != nil {
+		return err
+	}
+
+	for _, theme := range themeList {
+		fmt.Fprintln(c.Config.Out, theme)
+	}
+
+	return nil
 }

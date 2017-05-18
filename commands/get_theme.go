@@ -2,17 +2,20 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/aubm/postmanerator/configuration"
-	"github.com/aubm/postmanerator/theme"
 	"github.com/fatih/color"
 )
 
 type GetTheme struct {
 	Config *configuration.Configuration `inject:""`
+	Themes interface {
+		Download(themeName string) error
+	} `inject:""`
 }
 
-func (c *GetTheme) CanHandle(name string) bool {
+func (c *GetTheme) Is(name string) bool {
 	return name == CmdThemesGet
 }
 
@@ -21,10 +24,10 @@ func (c *GetTheme) Do() error {
 		return errors.New("You must provide the name or the URL of the theme you want to download")
 	}
 
-	if err := theme.GitClone(c.Config.Args[2], c.Config.LocalName, c.Config.ThemesRepository, theme.DefaultCloner{ThemesDirectory: c.Config.ThemesDirectory}); err != nil {
+	if err := c.Themes.Download(c.Config.Args[2]); err != nil {
 		return err
 	}
 
-	c.Config.Out.Write([]byte(color.GreenString("Theme successfully downloaded")))
+	fmt.Fprintln(c.Config.Out, color.GreenString("Theme successfully downloaded"))
 	return nil
 }

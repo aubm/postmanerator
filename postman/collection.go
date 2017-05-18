@@ -78,7 +78,7 @@ func CollectionFromFile(file string, options CollectionOptions) (*Collection, er
 type CollectionOptions struct {
 	IgnoredRequestHeaders  HeadersList
 	IgnoredResponseHeaders HeadersList
-	EnvironmentVariables   map[string]string
+	EnvironmentVariables   Environment
 }
 
 type HeadersList []string

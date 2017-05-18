@@ -9,6 +9,6 @@ const (
 )
 
 type Command interface {
-	CanHandle(name string) bool
+	Is(name string) bool
 	Do() error
 }

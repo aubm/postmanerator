@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+type Environment map[string]string
+
 type environmentExport struct {
 	Values []struct {
 		Key   string `json:"key"`
@@ -12,7 +14,7 @@ type environmentExport struct {
 	} `json:"values"`
 }
 
-func EnvironmentFromFile(file string) (map[string]string, error) {
+func EnvironmentFromFile(file string) (Environment, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		return nil, err

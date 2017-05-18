@@ -103,13 +103,13 @@ The list of available themes will be printed out to the standard output. By defa
 ### Download new themes
 
 By now, you probably only have the `default` theme available, the `postmanerator themes get` command allows you download a new existing theme.
-You can either specify the name of one of the themes that are indexed in the [official themes repository](https://github.com/aubm/postmanerator-themes), or either specify a full URL pointing to git repository. Moreover the `-local-name` option allows you to change the name of your local copy of the theme. Please see the following examples.
+You can either specify the name of one of the themes that are indexed in the [official themes repository](https://github.com/aubm/postmanerator-themes), or either specify a full URL pointing to git repository. Moreover the `-theme-local-name` option allows you to change the name of your local copy of the theme. Please see the following examples.
 
 ```bash
 postmanerator themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'markdown'
-postmanerator -local-name="my-markdown" themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'my-markdown'
+postmanerator -theme-local-name="my-markdown" themes get markdown # will down the theme 'markdown' and copy it under your local themes directory in a folder named 'my-markdown'
 postmanerator themes get https://github.com/aubm/postmanerator-markdown-theme.git # will clone the given repository under your local themes directory, in a folder named 'postmanerator-markdown-theme'
-postmanerator -local-name="markdown" themes get https://github.com/aubm/postmanerator-markdown-theme.git # will clone the given repository under your local themes directory, in a folder named 'markdown'
+postmanerator -theme-local-name="markdown" themes get https://github.com/aubm/postmanerator-markdown-theme.git # will clone the given repository under your local themes directory, in a folder named 'markdown'
 ```
 
 ### Delete a theme

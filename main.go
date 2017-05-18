@@ -6,6 +6,8 @@ import (
 
 	"github.com/aubm/postmanerator/commands"
 	"github.com/aubm/postmanerator/configuration"
+	"github.com/aubm/postmanerator/themes"
+	"github.com/aubm/postmanerator/utils"
 	"github.com/facebookgo/inject"
 	"github.com/fatih/color"
 )
@@ -13,6 +15,8 @@ import (
 var (
 	config             = configuration.Config
 	errUnknownCmd      = fmt.Errorf("Command not found, please see the documentation at https://github.com/aubm/postmanerator")
+	themesManager      = &themes.Manager{}
+	gitAgent           = &utils.GitAgent{}
 	defaultCommand     = &commands.Default{}
 	getThemeCommand    = &commands.GetTheme{}
 	deleteThemeCommand = &commands.DeleteTheme{}
@@ -25,7 +29,8 @@ func init() {
 }
 
 func _init() error {
-	if err := inject.Populate(&config, defaultCommand, getThemeCommand, deleteThemeCommand, listThemesCommand); err != nil {
+	if err := inject.Populate(&config, themesManager, defaultCommand, getThemeCommand, deleteThemeCommand,
+		listThemesCommand, gitAgent); err != nil {
 		return fmt.Errorf("app initialization failed: %v", err)
 	}
 	availableCommands = append(availableCommands,
@@ -45,7 +50,7 @@ func main() {
 func _main() (err error) {
 	userCommand := evaluateUserCommand()
 	for _, availableCommand := range availableCommands {
-		if availableCommand.CanHandle(userCommand) {
+		if availableCommand.Is(userCommand) {
 			return availableCommand.Do()
 		}
 	}

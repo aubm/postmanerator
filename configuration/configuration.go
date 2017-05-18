@@ -18,7 +18,7 @@ type Configuration struct {
 	UsedTheme              string
 	OutputFile             string
 	Watch                  bool
-	LocalName              string
+	ThemeLocalName         string
 	IgnoredRequestHeaders  StringsFlag
 	IgnoredResponseHeaders StringsFlag
 	ThemesDirectory        string
@@ -55,7 +55,7 @@ func parseCommandFlags() {
 	flag.StringVar(&Config.UsedTheme, "theme", "default", "the theme to use")
 	flag.StringVar(&Config.OutputFile, "output", "", "the output file, default is stdout")
 	flag.BoolVar(&Config.Watch, "watch", false, "automatically regenerate the output when the theme changes")
-	flag.StringVar(&Config.LocalName, "local-name", "", "the name of the local copy of the downloaded theme")
+	flag.StringVar(&Config.ThemeLocalName, "theme-local-name", "", "the name of the local copy of the downloaded theme")
 	flag.Var(&Config.IgnoredResponseHeaders, "ignored-response-headers", "a comma separated list of ignored response headers")
 	flag.Var(&Config.IgnoredRequestHeaders, "ignored-request-headers", "a comma separated list of ignored request headers")
 	flag.Parse()

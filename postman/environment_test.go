@@ -13,7 +13,7 @@ func TestEnvironmentFromFile(t *testing.T) {
 
 	env, err := EnvironmentFromFile(filename)
 
-	expectedEnv := map[string]string{"domain": "localhost:8080"}
+	expectedEnv := Environment{"domain": "localhost:8080"}
 	if ok := reflect.DeepEqual(env, expectedEnv); ok == false {
 		t.Errorf("Expected %v, got %v, err is %v", expectedEnv, env, err)
 	}
