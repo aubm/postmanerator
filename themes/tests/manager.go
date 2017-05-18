@@ -14,3 +14,7 @@ func (m *MockThemesManager) List() ([]string, error) {
 func (m *MockThemesManager) Download(themeName string) error {
 	return m.Called(themeName).Error(0)
 }
+
+func (m *MockThemesManager) Delete(theme string) error {
+	return m.Called(theme).Error(0)
+}
