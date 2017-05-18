@@ -10,3 +10,7 @@ func (m *MockThemesManager) List() ([]string, error) {
 	args := m.Called()
 	return args.Get(0).([]string), args.Error(1)
 }
+
+func (m *MockThemesManager) Download(themeName string) error {
+	return m.Called(themeName).Error(0)
+}
