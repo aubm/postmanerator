@@ -54,7 +54,7 @@ func (c *Default) Do() error {
 		return err
 	}
 
-	outputFile, err := c.openOutputFile()
+	outputFile, err := c.createOutputFile()
 	if err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func (c *Default) getTheme() (*themes.Theme, error) {
 	return c.Themes.Open(usedTheme)
 }
 
-func (c *Default) openOutputFile() (*os.File, error) {
+func (c *Default) createOutputFile() (*os.File, error) {
 	if c.Config.OutputFile == "" {
 		return os.Stdout, nil
 	}

@@ -14,11 +14,21 @@ func TestCommands(t *testing.T) {
 	RunSpecs(t, "Commands Suite")
 }
 
+func putFileContents(filePath, contents string) {
+	f := createFile(filePath)
+	defer f.Close()
+	must(f.Write([]byte(contents)))
+}
+
 func readFileContents(filePath string) string {
 	f := openFile(filePath)
 	defer f.Close()
 	b := must(ioutil.ReadAll(f)).([]byte)
 	return string(b[:])
+}
+
+func createFile(filePath string) *os.File {
+	return must(os.Create(filePath)).(*os.File)
 }
 
 func openFile(filePath string) *os.File {

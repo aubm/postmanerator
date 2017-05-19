@@ -132,6 +132,59 @@ var _ = Describe("Default", func() {
 				Expect(mockStdOut.String()).To(Equal("Generating output... " + color.GreenString("SUCCESS.") + "\n"))
 			})
 
+			Context("and custom config parameters for the collection parsing", func() {
+
+				BeforeEach(func() {
+					defaultCommand.Config.IgnoredRequestHeaders = configuration.StringsFlag{Values: []string{"X-Foo", "X-Bar"}}
+					defaultCommand.Config.IgnoredResponseHeaders = configuration.StringsFlag{Values: []string{"X-Fizz", "X-Buzz"}}
+				})
+
+				It("should propagate the options to the collection builder", func() {
+					args := mockCollectionBuilder.Calls[0].Arguments
+					Expect(args.Get(1)).To(Equal(postman.BuilderOptions{
+						IgnoredRequestHeaders:  postman.HeadersList{"X-Foo", "X-Bar"},
+						IgnoredResponseHeaders: postman.HeadersList{"X-Fizz", "X-Buzz"},
+					}))
+				})
+
+			})
+
+			Context("and using a custom environment", func() {
+
+				var environment postman.Environment
+
+				BeforeEach(func() {
+					defaultCommand.Config.EnvironmentFile = "awesome-environment.json"
+					environment = postman.Environment{"foo": "bar"}
+					mockEnvironmentBuilder.On("FromFile", any).Return(environment, nil)
+				})
+
+				It("should build the right environment file", func() {
+					Expect(len(mockEnvironmentBuilder.Calls)).To(Equal(1))
+					Expect(mockEnvironmentBuilder.Calls[0].Arguments.String(0)).To(Equal("awesome-environment.json"))
+				})
+
+				It("should propagate the environment to the collection builder", func() {
+					args := mockCollectionBuilder.Calls[0].Arguments
+					Expect(args.Get(1)).To(Equal(postman.BuilderOptions{
+						EnvironmentVariables: environment,
+					}))
+				})
+
+			})
+
+			Context("and the output file already exists and has contents", func() {
+
+				BeforeEach(func() {
+					putFileContents(outputFilePath, "existing contents")
+				})
+
+				It("should truncate the existing contents", func() {
+					Expect(readFileContents(outputFilePath)).To(Equal("some contents"))
+				})
+
+			})
+
 		})
 
 	})
