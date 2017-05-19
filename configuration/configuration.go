@@ -34,7 +34,7 @@ const (
 
 var (
 	InitErr error
-	Config  = Configuration{
+	Config  = &Configuration{
 		Out:              os.Stdout,
 		ThemesRepository: defaultThemesRepository,
 	}
@@ -43,7 +43,7 @@ As a workaround, you can define the POSTMANERATOR_PATH environment variable.
 Please consult the documentation here https://github.com/aubm/postmanerator and feel free to submit an issue.`)
 )
 
-func init() {
+func Init() {
 	parseCommandFlags()
 	parseCommandArgs()
 	InitErr = parseThemesDir()

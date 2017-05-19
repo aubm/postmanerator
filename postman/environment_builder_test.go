@@ -11,7 +11,8 @@ import (
 func TestEnvironmentFromFile(t *testing.T) {
 	filename := createTmpEnvironmentFile()
 
-	env, err := EnvironmentFromFile(filename)
+	environmentBuilder := &EnvironmentBuilder{}
+	env, err := environmentBuilder.FromFile(filename)
 
 	expectedEnv := Environment{"domain": "localhost:8080"}
 	if ok := reflect.DeepEqual(env, expectedEnv); ok == false {

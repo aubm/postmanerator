@@ -3,13 +3,12 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
-	"text/template"
 
 	"github.com/aubm/postmanerator/configuration"
 	"github.com/aubm/postmanerator/postman"
 	"github.com/aubm/postmanerator/themes"
-	"github.com/aubm/postmanerator/themes/helper"
 	"github.com/fatih/color"
 	"github.com/howeyc/fsnotify"
 )
@@ -19,6 +18,15 @@ type Default struct {
 	Themes interface {
 		Open(themeName string) (*themes.Theme, error)
 		Download(themeName string) error
+	} `inject:""`
+	CollectionBuilder interface {
+		FromFile(file string, options postman.BuilderOptions) (*postman.Collection, error)
+	} `inject:""`
+	EnvironmentBuilder interface {
+		FromFile(file string) (postman.Environment, error)
+	} `inject:""`
+	Renderer interface {
+		Render(w io.Writer, theme *themes.Theme, collection *postman.Collection) error
 	} `inject:""`
 }
 
@@ -77,7 +85,7 @@ func (c *Default) getPostmanEnvironment() (environment postman.Environment, err 
 		return
 	}
 
-	environment, err = postman.EnvironmentFromFile(c.Config.EnvironmentFile)
+	environment, err = c.EnvironmentBuilder.FromFile(c.Config.EnvironmentFile)
 	if err != nil {
 		err = fmt.Errorf("Failed to open environment file: %v", err)
 	}
@@ -86,17 +94,15 @@ func (c *Default) getPostmanEnvironment() (environment postman.Environment, err 
 }
 
 func (c *Default) getPostmanCollection(environment postman.Environment) (*postman.Collection, error) {
-	options := postman.CollectionOptions{
+	options := postman.BuilderOptions{
 		IgnoredRequestHeaders:  postman.HeadersList(c.Config.IgnoredRequestHeaders.Values),
 		IgnoredResponseHeaders: postman.HeadersList(c.Config.IgnoredResponseHeaders.Values),
 		EnvironmentVariables:   environment,
 	}
-	postmanCollection, err := postman.CollectionFromFile(c.Config.CollectionFile, options)
+	postmanCollection, err := c.CollectionBuilder.FromFile(c.Config.CollectionFile, options)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse collection file: %v", err)
 	}
-
-	postmanCollection.ExtractStructuresDefinition()
 
 	return postmanCollection, nil
 }
@@ -135,20 +141,12 @@ func (c *Default) openOutputFile() (*os.File, error) {
 
 func (c *Default) writeOutput(outputFile *os.File, theme *themes.Theme, collection *postman.Collection) {
 	fmt.Fprint(c.Config.Out, "Generating output... ")
-	if err := c._writeOutput(outputFile, theme, collection); err != nil {
+	outputFile.Truncate(0)
+	if err := c.Renderer.Render(outputFile, theme, collection); err != nil {
 		fmt.Fprintln(c.Config.Out, color.RedString("FAIL. %v", err))
 		return
 	}
 	fmt.Fprintln(c.Config.Out, color.GreenString("SUCCESS."))
-}
-
-func (c *Default) _writeOutput(outputFile *os.File, theme *themes.Theme, collection *postman.Collection) error {
-	tmpl, err := template.New("").Funcs(helper.GetFuncMap()).ParseFiles(theme.Files...)
-	if err != nil {
-		return err
-	}
-	outputFile.Truncate(0)
-	return tmpl.ExecuteTemplate(outputFile, "index.tpl", *collection)
 }
 
 func (c *Default) watchThemeFilesChanges(theme *themes.Theme, action func()) error {

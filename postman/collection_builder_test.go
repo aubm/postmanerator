@@ -7,11 +7,7 @@ import (
 
 func TestExtractStructuresDefinition(t *testing.T) {
 	// Given
-	col, _ := CollectionFromFile("../tests_data/collection-01.json", CollectionOptions{})
-	if col == nil {
-		t.Error("Cannot test extracting structures definitions, collection is nil")
-		return
-	}
+	builder := &CollectionBuilder{}
 	expectedStructures := []StructureDefinition{
 		{Name: "Dog", Description: "A greater animal", Fields: []StructureFieldDefinition{
 			{Name: "id", Description: "A unique identifier for the dog", Type: "int"},
@@ -26,9 +22,13 @@ func TestExtractStructuresDefinition(t *testing.T) {
 	}
 
 	// When
-	col.ExtractStructuresDefinition()
+	col, _ := builder.FromFile("../tests_data/collection-01.json", BuilderOptions{})
 
 	// Then
+	if col == nil {
+		t.Error("Cannot test extracting structures definitions, collection is nil")
+		return
+	}
 	if reflect.DeepEqual(col.Structures, expectedStructures) == false {
 		t.Errorf("Collection structures definition were not properly extracted, expected %v, got %v",
 			expectedStructures, col.Structures)

@@ -6,7 +6,7 @@ import (
 
 	. "github.com/aubm/postmanerator/commands"
 	"github.com/aubm/postmanerator/configuration"
-	. "github.com/aubm/postmanerator/themes/tests"
+	. "github.com/aubm/postmanerator/themes/mocks"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -15,13 +15,13 @@ var _ = Describe("ListThemes", func() {
 
 	var (
 		mockStdOut        *bytes.Buffer
-		mockThemesManager *MockThemesManager
+		mockThemesManager *MockThemeManager
 		listThemesCommand *ListThemes
 	)
 
 	BeforeEach(func() {
 		mockStdOut = new(bytes.Buffer)
-		mockThemesManager = &MockThemesManager{}
+		mockThemesManager = &MockThemeManager{}
 		mockConfig := &configuration.Configuration{Out: mockStdOut}
 		listThemesCommand = &ListThemes{
 			Config: mockConfig,
