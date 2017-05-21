@@ -54,14 +54,8 @@ func (c *Default) Do() error {
 		return err
 	}
 
-	outputFile, err := c.createOutputFile()
-	if err != nil {
-		return err
-	}
-	defer outputFile.Close()
-
 	writeOutput := func() {
-		c.writeOutput(outputFile, theme, postmanCollection)
+		c.writeOutput(theme, postmanCollection)
 	}
 
 	writeOutput()
@@ -87,7 +81,7 @@ func (c *Default) getPostmanEnvironment() (environment postman.Environment, err 
 
 	environment, err = c.EnvironmentBuilder.FromFile(c.Config.EnvironmentFile)
 	if err != nil {
-		err = fmt.Errorf("Failed to open environment file: %v", err)
+		err = fmt.Errorf("Failed to parse environment file: %v", err)
 	}
 
 	return
@@ -116,7 +110,7 @@ func (c *Default) getTheme() (*themes.Theme, error) {
 	}
 
 	if err != themes.ErrThemeNotFound {
-		return nil, err
+		return nil, fmt.Errorf("Failed to open the theme: %v", err)
 	}
 
 	fmt.Fprintln(c.Config.Out, color.BlueString("Theme '%v' not found, trying to download it...", usedTheme))
@@ -127,9 +121,25 @@ func (c *Default) getTheme() (*themes.Theme, error) {
 	return c.Themes.Open(usedTheme)
 }
 
-func (c *Default) createOutputFile() (*os.File, error) {
+func (c *Default) writeOutput(theme *themes.Theme, collection *postman.Collection) {
+	outputFile, err := c.createOutputWriter()
+	if err != nil {
+		fmt.Fprintln(c.Config.Out, color.RedString(err.Error()))
+		return
+	}
+	defer outputFile.Close()
+
+	fmt.Fprint(c.Config.Out, "Generating output... ")
+	if err := c.Renderer.Render(outputFile, theme, collection); err != nil {
+		fmt.Fprintln(c.Config.Out, color.RedString("FAIL. %v", err))
+		return
+	}
+	fmt.Fprintln(c.Config.Out, color.GreenString("SUCCESS."))
+}
+
+func (c *Default) createOutputWriter() (io.WriteCloser, error) {
 	if c.Config.OutputFile == "" {
-		return os.Stdout, nil
+		return nopCloser{c.Config.Out}, nil
 	}
 
 	out, err := os.Create(c.Config.OutputFile)
@@ -137,16 +147,6 @@ func (c *Default) createOutputFile() (*os.File, error) {
 		return nil, fmt.Errorf("Failed to create output file: %v", err)
 	}
 	return out, nil
-}
-
-func (c *Default) writeOutput(outputFile *os.File, theme *themes.Theme, collection *postman.Collection) {
-	fmt.Fprint(c.Config.Out, "Generating output... ")
-	outputFile.Truncate(0)
-	if err := c.Renderer.Render(outputFile, theme, collection); err != nil {
-		fmt.Fprintln(c.Config.Out, color.RedString("FAIL. %v", err))
-		return
-	}
-	fmt.Fprintln(c.Config.Out, color.GreenString("SUCCESS."))
 }
 
 func (c *Default) watchThemeFilesChanges(theme *themes.Theme, action func()) error {
@@ -183,3 +183,9 @@ func (c *Default) executeActionForEachWatcherEvent(watcher *fsnotify.Watcher, ac
 func (c *Default) sleep() {
 	select {}
 }
+
+type nopCloser struct {
+	io.Writer
+}
+
+func (nopCloser) Close() error { return nil }

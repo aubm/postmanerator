@@ -2,7 +2,9 @@ package commands_test
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path"
 
@@ -25,6 +27,7 @@ var _ = Describe("Default", func() {
 
 	var (
 		mockStdOut             *bytes.Buffer
+		someBadError           error
 		outputFilePath         string
 		mockThemeManager       *MockThemeManager
 		mockThemeRenderer      *MockThemeRenderer
@@ -35,6 +38,7 @@ var _ = Describe("Default", func() {
 
 	BeforeEach(func() {
 		mockStdOut = new(bytes.Buffer)
+		someBadError = errors.New("something bad happened!")
 		outputFilePath = path.Join(os.TempDir(), fmt.Sprintf("postmanerator-generated-test-output-%s.out", uuid.NewV4().String()))
 		mockThemeManager = &MockThemeManager{}
 		mockThemeRenderer = &MockThemeRenderer{}
@@ -183,6 +187,225 @@ var _ = Describe("Default", func() {
 					Expect(readFileContents(outputFilePath)).To(Equal("some contents"))
 				})
 
+			})
+
+		})
+
+		Context("when no collection is provided", func() {
+
+			BeforeEach(func() {
+				defaultCommand.Config.CollectionFile = ""
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(Equal("You must provide a collection using the -collection flag"))
+			})
+
+			It("should not produce any command output", func() {
+				Expect(mockStdOut.String()).To(BeZero())
+			})
+
+		})
+
+		Context("when parsing the environment file fails", func() {
+
+			BeforeEach(func() {
+				defaultCommand.Config.EnvironmentFile = "invalid-environment.json"
+				mockEnvironmentBuilder.On("FromFile", any).Return(postman.Environment{}, someBadError)
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(Equal("Failed to parse environment file: something bad happened!"))
+			})
+
+			It("should not produce any command output", func() {
+				Expect(mockStdOut.String()).To(BeZero())
+			})
+
+		})
+
+		Context("when parsing the collection file fails", func() {
+
+			BeforeEach(func() {
+				mockCollectionBuilder.On("FromFile", any, any).Return(&postman.Collection{}, someBadError)
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(Equal("Failed to parse collection file: something bad happened!"))
+			})
+
+			It("should not produce any command output", func() {
+				Expect(mockStdOut.String()).To(BeZero())
+			})
+
+		})
+
+		Context("when opening the theme fails", func() {
+
+			var collection *postman.Collection
+
+			BeforeEach(func() {
+				collection = &postman.Collection{Id: "foo"}
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(&themes.Theme{}, someBadError)
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).ToNot(BeNil())
+				Expect(returnedError.Error()).To(Equal("Failed to open the theme: something bad happened!"))
+			})
+
+			It("should not produce any command output", func() {
+				Expect(mockStdOut.String()).To(BeZero())
+			})
+
+		})
+
+		Context("when the theme is not found locally", func() {
+
+			var (
+				collection *postman.Collection
+				theme      *themes.Theme
+			)
+
+			BeforeEach(func() {
+				defaultCommand.Config.UsedTheme = "custom_theme"
+				collection = &postman.Collection{Id: "foo"}
+				theme = &themes.Theme{Name: "custom_theme"}
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(&themes.Theme{}, themes.ErrThemeNotFound).Once()
+				mockThemeManager.On("Download", any).Return(nil).Once()
+				mockThemeManager.On("Open", any).Return(theme, nil).Once()
+				mockThemeRenderer.On("Render", any, any, any).Return(nil)
+			})
+
+			It("should not return an error", func() {
+				Expect(returnedError).To(BeNil())
+			})
+
+			It("should try to open, download and try to open again the right theme", func() {
+				Expect(len(mockThemeManager.Calls)).To(Equal(3))
+				for _, c := range mockThemeManager.Calls {
+					Expect(c.Arguments.String(0)).To(Equal("custom_theme"))
+				}
+			})
+
+			It("should produce the right command output", func() {
+				expectedOutput := color.BlueString("Theme 'custom_theme' not found, trying to download it...") + "\n" +
+					"Generating output... " + color.GreenString("SUCCESS.") + "\n"
+				Expect(mockStdOut.String()).To(Equal(expectedOutput))
+			})
+
+		})
+
+		Context("when the theme does not exist", func() {
+
+			var collection *postman.Collection
+
+			BeforeEach(func() {
+				defaultCommand.Config.UsedTheme = "custom_theme"
+				collection = &postman.Collection{Id: "foo"}
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(&themes.Theme{}, themes.ErrThemeNotFound).Once()
+				mockThemeManager.On("Download", any).Return(someBadError).Once()
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(Equal("something bad happened!"))
+			})
+
+			It("should try to open, download and try to open again the right theme", func() {
+				Expect(len(mockThemeManager.Calls)).To(Equal(2))
+				for _, c := range mockThemeManager.Calls {
+					Expect(c.Arguments.String(0)).To(Equal("custom_theme"))
+				}
+			})
+
+			It("should produce the right command output", func() {
+				Expect(mockStdOut.String()).To(Equal(color.BlueString("Theme 'custom_theme' not found, trying to download it...") + "\n"))
+			})
+
+		})
+
+		Context("when no output file is specified", func() {
+
+			var (
+				collection *postman.Collection
+				theme      *themes.Theme
+			)
+
+			BeforeEach(func() {
+				defaultCommand.Config.OutputFile = ""
+				collection = &postman.Collection{Id: "foo"}
+				theme = &themes.Theme{Name: "foo"}
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(theme, nil).Once()
+				mockThemeRenderer.On("Render", any, any, any).Return(nil).Run(func(args mock.Arguments) {
+					fmt.Fprint(args.Get(0).(io.Writer), "some contents")
+				})
+			})
+
+			It("should not return an error", func() {
+				Expect(returnedError).To(BeNil())
+			})
+
+			It("should write in the standard output", func() {
+				Expect(mockStdOut.String()).To(Equal("Generating output... some contents" + color.GreenString("SUCCESS.") + "\n"))
+			})
+
+		})
+
+		Context("when the output file can not be created", func() {
+
+			var (
+				collection *postman.Collection
+				theme      *themes.Theme
+			)
+
+			BeforeEach(func() {
+				collection = &postman.Collection{Id: "foo"}
+				theme = &themes.Theme{Name: "foo"}
+				outputFilePath = path.Join(os.TempDir(), fmt.Sprintf("postmanerator-%s/embedded/dir", uuid.NewV4().String()))
+				defaultCommand.Config.OutputFile = outputFilePath
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(theme, nil)
+			})
+
+			It("should not return an error", func() {
+				Expect(returnedError).To(BeNil())
+			})
+
+			It("should produce the right command output", func() {
+				Expect(mockStdOut.String()).To(ContainSubstring("Failed to create output file: open"))
+			})
+
+		})
+
+		Context("when rendering fails", func() {
+
+			var (
+				collection *postman.Collection
+				theme      *themes.Theme
+			)
+
+			BeforeEach(func() {
+				collection = &postman.Collection{Id: "foo"}
+				theme = &themes.Theme{Name: "foo"}
+				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
+				mockThemeManager.On("Open", any).Return(theme, nil)
+				mockThemeRenderer.On("Render", any, any, any).Return(someBadError)
+			})
+
+			It("should not return an error", func() {
+				Expect(returnedError).To(BeNil())
+			})
+
+			It("should produce the right command output", func() {
+				Expect(mockStdOut.String()).To(Equal("Generating output... " + color.RedString("FAIL. something bad happened!") + "\n"))
 			})
 
 		})
