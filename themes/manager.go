@@ -97,7 +97,7 @@ func (m *Manager) searchForThemeUrlInThemeList(themeList io.Reader, themeNameToS
 		if scanner.Text() == fmt.Sprintf("\tpath = %v", themeNameToSearch) {
 			scanner.Scan()
 			urlLine := scanner.Text()
-			urlLine = urlLine[7:len(urlLine)]
+			urlLine = urlLine[7:]
 			return urlLine, nil
 		}
 	}
