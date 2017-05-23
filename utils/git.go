@@ -6,9 +6,7 @@ import (
 	"os/exec"
 )
 
-type GitAgent struct {
-	ThemesDirectory string
-}
+type GitAgent struct{}
 
 func (c GitAgent) Clone(args []string, options CloneOptions) error {
 	args = append([]string{"clone"}, args...)
