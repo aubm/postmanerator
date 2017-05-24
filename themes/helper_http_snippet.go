@@ -2,6 +2,7 @@ package themes
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func helperHttpSnippet(request postman.Request) (httpSnippet string) {
-	parsedURL, err := request.ParsedURL()
+	parsedURL, err := parsedURL(request.URL)
 	if err != nil {
 		httpSnippet = err.Error()
 		return
@@ -18,7 +19,7 @@ func helperHttpSnippet(request postman.Request) (httpSnippet string) {
 	httpSnippet += fmt.Sprintf(`%v %v HTTP/1.1
 Host: %v`, request.Method, parsedURL.RequestURI(), parsedURL.Host)
 
-	for _, header := range request.Headers() {
+	for _, header := range request.Headers {
 		httpSnippet += fmt.Sprintf("\n%v: %v", header.Name, header.Value)
 	}
 
@@ -26,18 +27,18 @@ Host: %v`, request.Method, parsedURL.RequestURI(), parsedURL.Host)
 		return
 	}
 
-	if request.DataMode == "raw" && request.RawModeData != "" {
-		httpSnippet += fmt.Sprintf("\n\n%v", request.RawModeData)
+	if request.PayloadType == "raw" && request.PayloadRaw != "" {
+		httpSnippet += fmt.Sprintf("\n\n%v", request.PayloadRaw)
 		return
 	}
 
-	if len(request.Data) <= 0 {
+	if len(request.PayloadParams) <= 0 {
 		return
 	}
 
-	if request.DataMode == "urlencoded" {
+	if request.PayloadType == "urlencoded" {
 		var dataList []string
-		for _, data := range request.Data {
+		for _, data := range request.PayloadParams {
 			dataList = append(dataList, fmt.Sprintf("%v=%v", data.Key, data.Value))
 		}
 		httpSnippet += fmt.Sprintf(`
@@ -46,13 +47,13 @@ Content-Type: application/x-www-form-urlencoded
 %v`, strings.Join(dataList, "&"))
 	}
 
-	if request.DataMode == "params" {
+	if request.PayloadType == "params" {
 		boundary := "----WebKitFormBoundary7MA4YWxkTrZu0gW"
 		httpSnippet += fmt.Sprintf(`
 Content-Type: multipart/form-data; boundary=%v
 
 %v`, boundary, boundary)
-		for _, data := range request.Data {
+		for _, data := range request.PayloadParams {
 			httpSnippet += fmt.Sprintf(`
 Content-Disposition: form-data; name="%v"
 
@@ -62,4 +63,12 @@ Content-Disposition: form-data; name="%v"
 	}
 
 	return
+}
+
+func parsedURL(rawUrl string) (*url.URL, error) {
+	parsedURL, err := url.Parse(rawUrl)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse url\n%v", err)
+	}
+	return parsedURL, nil
 }

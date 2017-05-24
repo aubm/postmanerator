@@ -86,12 +86,12 @@ var _ = Describe("Default", func() {
 		Context("when everything is ok", func() {
 
 			var (
-				collection *postman.Collection
+				collection postman.Collection
 				theme      *themes.Theme
 			)
 
 			BeforeEach(func() {
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				theme = &themes.Theme{Name: "foo"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(theme, nil)
@@ -146,8 +146,8 @@ var _ = Describe("Default", func() {
 				It("should propagate the options to the collection builder", func() {
 					args := mockCollectionBuilder.Calls[0].Arguments
 					Expect(args.Get(1)).To(Equal(postman.BuilderOptions{
-						IgnoredRequestHeaders:  postman.HeadersList{"X-Foo", "X-Bar"},
-						IgnoredResponseHeaders: postman.HeadersList{"X-Fizz", "X-Buzz"},
+						IgnoredRequestHeaders:  []string{"X-Foo", "X-Bar"},
+						IgnoredResponseHeaders: []string{"X-Fizz", "X-Buzz"},
 					}))
 				})
 
@@ -229,7 +229,7 @@ var _ = Describe("Default", func() {
 		Context("when parsing the collection file fails", func() {
 
 			BeforeEach(func() {
-				mockCollectionBuilder.On("FromFile", any, any).Return(&postman.Collection{}, someBadError)
+				mockCollectionBuilder.On("FromFile", any, any).Return(postman.Collection{}, someBadError)
 			})
 
 			It("should return an error", func() {
@@ -245,10 +245,10 @@ var _ = Describe("Default", func() {
 
 		Context("when opening the theme fails", func() {
 
-			var collection *postman.Collection
+			var collection postman.Collection
 
 			BeforeEach(func() {
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(&themes.Theme{}, someBadError)
 			})
@@ -267,13 +267,13 @@ var _ = Describe("Default", func() {
 		Context("when the theme is not found locally", func() {
 
 			var (
-				collection *postman.Collection
+				collection postman.Collection
 				theme      *themes.Theme
 			)
 
 			BeforeEach(func() {
 				defaultCommand.Config.UsedTheme = "custom_theme"
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				theme = &themes.Theme{Name: "custom_theme"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(&themes.Theme{}, themes.ErrThemeNotFound).Once()
@@ -303,11 +303,11 @@ var _ = Describe("Default", func() {
 
 		Context("when the theme does not exist", func() {
 
-			var collection *postman.Collection
+			var collection postman.Collection
 
 			BeforeEach(func() {
 				defaultCommand.Config.UsedTheme = "custom_theme"
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(&themes.Theme{}, themes.ErrThemeNotFound).Once()
 				mockThemeManager.On("Download", any).Return(someBadError).Once()
@@ -334,13 +334,13 @@ var _ = Describe("Default", func() {
 		Context("when no output file is specified", func() {
 
 			var (
-				collection *postman.Collection
+				collection postman.Collection
 				theme      *themes.Theme
 			)
 
 			BeforeEach(func() {
 				defaultCommand.Config.OutputFile = ""
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				theme = &themes.Theme{Name: "foo"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(theme, nil).Once()
@@ -362,12 +362,12 @@ var _ = Describe("Default", func() {
 		Context("when the output file can not be created", func() {
 
 			var (
-				collection *postman.Collection
+				collection postman.Collection
 				theme      *themes.Theme
 			)
 
 			BeforeEach(func() {
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				theme = &themes.Theme{Name: "foo"}
 				outputFilePath = path.Join(os.TempDir(), fmt.Sprintf("postmanerator-%s/embedded/dir", uuid.NewV4().String()))
 				defaultCommand.Config.OutputFile = outputFilePath
@@ -388,12 +388,12 @@ var _ = Describe("Default", func() {
 		Context("when rendering fails", func() {
 
 			var (
-				collection *postman.Collection
+				collection postman.Collection
 				theme      *themes.Theme
 			)
 
 			BeforeEach(func() {
-				collection = &postman.Collection{Id: "foo"}
+				collection = postman.Collection{Name: "foo"}
 				theme = &themes.Theme{Name: "foo"}
 				mockCollectionBuilder.On("FromFile", any, any).Return(collection, nil)
 				mockThemeManager.On("Open", any).Return(theme, nil)

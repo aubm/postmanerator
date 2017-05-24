@@ -22,12 +22,11 @@ func TestExtractStructuresDefinition(t *testing.T) {
 	}
 
 	// When
-	col, _ := builder.FromFile("../tests_data/collection-01.json", BuilderOptions{})
+	col, err := builder.FromFile("tests_data/collection-01.json", BuilderOptions{})
 
 	// Then
-	if col == nil {
-		t.Error("Cannot test extracting structures definitions, collection is nil")
-		return
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
 	}
 	if reflect.DeepEqual(col.Structures, expectedStructures) == false {
 		t.Errorf("Collection structures definition were not properly extracted, expected %v, got %v",

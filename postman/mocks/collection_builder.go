@@ -9,7 +9,7 @@ type MockCollectionBuilder struct {
 	mock.Mock
 }
 
-func (m *MockCollectionBuilder) FromFile(file string, options BuilderOptions) (*Collection, error) {
+func (m *MockCollectionBuilder) FromFile(file string, options BuilderOptions) (Collection, error) {
 	args := m.Called(file, options)
-	return args.Get(0).(*Collection), args.Error(1)
+	return args.Get(0).(Collection), args.Error(1)
 }

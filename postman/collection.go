@@ -1,15 +1,58 @@
 package postman
 
 type Collection struct {
-	Id          string      `json:"id"`
-	Name        string      `json:"name"`
-	Description string      `json:"description"`
-	Order       []string    `json:"order"`
-	Folders     []Folder    `json:"folders"`
-	Timestamp   int64       `json:"timestamp"`
-	Owner       interface{} `json:"owner"`
-	RemoteLink  string      `json:"remoteLink"`
-	Public      bool        `json:"public"`
-	Requests    []Request   `json:"requests"`
+	Name        string
+	Description string
+	Requests    []Request
+	Folders     []Folder
 	Structures  []StructureDefinition
+}
+
+type Request struct {
+	ID            string
+	Name          string
+	Description   string
+	Method        string
+	URL           string
+	PayloadType   string
+	PayloadRaw    string
+	PayloadParams []KeyValuePair
+	PathVariables []KeyValuePair
+	Headers       []KeyValuePair
+	Responses     []Response
+}
+
+type Response struct {
+	ID         string
+	Name       string
+	Status     string
+	StatusCode int
+	Body       string
+	Headers    []KeyValuePair
+}
+
+type Folder struct {
+	ID          string
+	Name        string
+	Description string
+	Requests    []Request
+}
+
+type StructureDefinition struct {
+	Name        string
+	Description string
+	Fields      []StructureFieldDefinition
+}
+
+type StructureFieldDefinition struct {
+	Name        string
+	Description string
+	Type        string
+}
+
+type KeyValuePair struct {
+	Name        string
+	Key         string
+	Value       interface{}
+	Description string
 }

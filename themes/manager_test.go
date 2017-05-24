@@ -40,7 +40,7 @@ var _ = Describe("Manager", func() {
 			nbRequests++
 			themesRepositoryGeneratedRequests = append(themesRepositoryGeneratedRequests, r)
 			if nbRequests > nbFailedRequests {
-				http.ServeFile(w, r, "test_data/themes_list.txt")
+				http.ServeFile(w, r, "tests_data/themes_list.txt")
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 			}

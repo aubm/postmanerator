@@ -20,13 +20,13 @@ type Default struct {
 		Download(themeName string) error
 	} `inject:""`
 	CollectionBuilder interface {
-		FromFile(file string, options postman.BuilderOptions) (*postman.Collection, error)
+		FromFile(file string, options postman.BuilderOptions) (postman.Collection, error)
 	} `inject:""`
 	EnvironmentBuilder interface {
 		FromFile(file string) (postman.Environment, error)
 	} `inject:""`
 	Renderer interface {
-		Render(w io.Writer, theme *themes.Theme, collection *postman.Collection) error
+		Render(w io.Writer, theme *themes.Theme, collection postman.Collection) error
 	} `inject:""`
 }
 
@@ -87,15 +87,15 @@ func (c *Default) getPostmanEnvironment() (environment postman.Environment, err 
 	return
 }
 
-func (c *Default) getPostmanCollection(environment postman.Environment) (*postman.Collection, error) {
+func (c *Default) getPostmanCollection(environment postman.Environment) (postman.Collection, error) {
 	options := postman.BuilderOptions{
-		IgnoredRequestHeaders:  postman.HeadersList(c.Config.IgnoredRequestHeaders.Values),
-		IgnoredResponseHeaders: postman.HeadersList(c.Config.IgnoredResponseHeaders.Values),
+		IgnoredRequestHeaders:  c.Config.IgnoredRequestHeaders.Values,
+		IgnoredResponseHeaders: c.Config.IgnoredResponseHeaders.Values,
 		EnvironmentVariables:   environment,
 	}
 	postmanCollection, err := c.CollectionBuilder.FromFile(c.Config.CollectionFile, options)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse collection file: %v", err)
+		return postman.Collection{}, fmt.Errorf("Failed to parse collection file: %v", err)
 	}
 
 	return postmanCollection, nil
@@ -121,7 +121,7 @@ func (c *Default) getTheme() (*themes.Theme, error) {
 	return c.Themes.Open(usedTheme)
 }
 
-func (c *Default) writeOutput(theme *themes.Theme, collection *postman.Collection) {
+func (c *Default) writeOutput(theme *themes.Theme, collection postman.Collection) {
 	outputFile, err := c.createOutputWriter()
 	if err != nil {
 		fmt.Fprintln(c.Config.Out, color.RedString(err.Error()))
