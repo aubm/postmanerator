@@ -11,18 +11,19 @@ import (
 )
 
 type Configuration struct {
-	Out                    io.Writer
-	ThemesRepository       string
-	CollectionFile         string
-	EnvironmentFile        string
-	UsedTheme              string
-	OutputFile             string
-	Watch                  bool
-	ThemeLocalName         string
-	IgnoredRequestHeaders  StringsFlag
-	IgnoredResponseHeaders StringsFlag
-	ThemesDirectory        string
-	Args                   []string
+	Out                                        io.Writer
+	ThemesRepository                           string
+	SleepTimeBetweenEachThemeDownloadInSeconds int
+	CollectionFile                             string
+	EnvironmentFile                            string
+	UsedTheme                                  string
+	OutputFile                                 string
+	Watch                                      bool
+	ThemeLocalName                             string
+	IgnoredRequestHeaders                      StringsFlag
+	IgnoredResponseHeaders                     StringsFlag
+	ThemesDirectory                            string
+	Args                                       []string
 }
 
 const (
@@ -35,8 +36,9 @@ const (
 var (
 	InitErr error
 	Config  = &Configuration{
-		Out:              os.Stdout,
-		ThemesRepository: defaultThemesRepository,
+		Out:                                        os.Stdout,
+		ThemesRepository:                           defaultThemesRepository,
+		SleepTimeBetweenEachThemeDownloadInSeconds: 3,
 	}
 	errThemesNoDirectory = errors.New(`An error occurred while trying to determine which directory to use for themes.
 As a workaround, you can define the POSTMANERATOR_PATH environment variable.

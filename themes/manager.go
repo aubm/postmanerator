@@ -78,15 +78,18 @@ func (m *Manager) getThemesListReader() (io.ReadCloser, error) {
 	var resp *http.Response
 	var err error
 	nbMaxTries := 3
-	sleepTimeBetweenEachTry := 3 * time.Second
+	sleepTimeBetweenEachTry := time.Duration(m.Config.SleepTimeBetweenEachThemeDownloadInSeconds) * time.Second
 	for i := 0; i < nbMaxTries; i++ {
 		resp, err = http.Get(m.Config.ThemesRepository)
-		if err == nil {
+		if err == nil && resp.StatusCode == 200 {
 			return resp.Body, nil
 		}
 		if i < nbMaxTries {
 			time.Sleep(sleepTimeBetweenEachTry)
 		}
+	}
+	if err == nil {
+		err = fmt.Errorf("themes repository responded with status %v", resp.StatusCode)
 	}
 	return nil, err
 }

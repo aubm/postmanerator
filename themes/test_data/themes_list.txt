@@ -1,0 +1,6 @@
+[submodule "default"]
+	path = default
+	url = https://github.com/aubm/postmanerator-default-theme.git
+[submodule "markdown"]
+	path = markdown
+	url = https://github.com/aubm/postmanerator-markdown-theme.git
