@@ -12,7 +12,8 @@ func TestThemes(t *testing.T) {
 	RunSpecs(t, "Themes Suite")
 }
 
-func must(err error) {
+func must(v ...interface{}) {
+	err := v[len(v)-1]
 	if err != nil {
 		panic(err)
 	}

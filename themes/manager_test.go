@@ -361,4 +361,114 @@ var _ = Describe("Manager", func() {
 
 	})
 
+	Describe("Open", func() {
+
+		var (
+			themeToOpen   string
+			returnedTheme *Theme
+			returnedError error
+		)
+
+		JustBeforeEach(func() {
+			returnedTheme, returnedError = manager.Open(themeToOpen)
+		})
+
+		BeforeEach(func() {
+			themeToOpen = ""
+			returnedTheme = nil
+			returnedError = nil
+		})
+
+		BeforeEach(func() {
+			must(os.Mkdir(path.Join(createdTmpThemesDirectory, "default"), 0777))
+			must(os.Create(path.Join(createdTmpThemesDirectory, "default", "index.tpl")))
+			must(os.Create(path.Join(createdTmpThemesDirectory, "default", "menu.tpl")))
+			must(os.Create(path.Join(createdTmpThemesDirectory, "default", "theme.css")))
+			must(os.Create(path.Join(createdTmpThemesDirectory, "invalid-theme")))
+		})
+
+		Context("when the theme exist", func() {
+
+			AfterEach(func() {
+				Expect(returnedError).To(BeNil())
+			})
+
+			Context("given just the theme name", func() {
+
+				BeforeEach(func() {
+					themeToOpen = "default"
+				})
+
+				It("should return the right theme", func() {
+					Expect(returnedTheme).To(Equal(&Theme{
+						Name: "default",
+						Path: path.Join(createdTmpThemesDirectory, "default"),
+						Files: []string{
+							path.Join(createdTmpThemesDirectory, "default", "index.tpl"),
+							path.Join(createdTmpThemesDirectory, "default", "menu.tpl"),
+							path.Join(createdTmpThemesDirectory, "default", "theme.css"),
+						},
+					}))
+				})
+
+			})
+
+			Context("given the full theme path", func() {
+
+				BeforeEach(func() {
+					themeToOpen = path.Join(createdTmpThemesDirectory, "default")
+				})
+
+				It("should return the right theme", func() {
+					Expect(returnedTheme).To(Equal(&Theme{
+						Name: path.Join(createdTmpThemesDirectory, "default"),
+						Path: path.Join(createdTmpThemesDirectory, "default"),
+						Files: []string{
+							path.Join(createdTmpThemesDirectory, "default", "index.tpl"),
+							path.Join(createdTmpThemesDirectory, "default", "menu.tpl"),
+							path.Join(createdTmpThemesDirectory, "default", "theme.css"),
+						},
+					}))
+				})
+
+			})
+
+		})
+
+		Context("when the theme does not exist", func() {
+
+			BeforeEach(func() {
+				themeToOpen = "theme-that-does-not-exist"
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(Equal("Theme not found"))
+			})
+
+			It("should not return a theme", func() {
+				Expect(returnedTheme).To(BeNil())
+			})
+
+		})
+
+		Context("when listing the theme files fails", func() {
+
+			BeforeEach(func() {
+				themeToOpen = "invalid-theme"
+			})
+
+			It("should return an error", func() {
+				Expect(returnedError).NotTo(BeNil())
+				Expect(returnedError.Error()).To(ContainSubstring("Failed to read theme directory:"))
+			})
+
+			It("should not return a theme", func() {
+				Expect(returnedTheme).To(BeNil())
+			})
+
+		})
+
+	})
+
 })
