@@ -56,6 +56,11 @@ var _ = Describe("Renderer", func() {
 			expectedOutput = readFileContent("tests_data/themes/curl_snippets.out")
 		})
 
+		It("should generate http snippets", func() {
+			usedTheme = &Theme{Files: []string{"tests_data/themes/http_snippets/index.tpl"}}
+			expectedOutput = readFileContent("tests_data/themes/http_snippets.out")
+		})
+
 	})
 
 })

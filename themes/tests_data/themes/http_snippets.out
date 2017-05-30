@@ -1,0 +1,34 @@
+
+GET /cats HTTP/1.1
+Host: my-api
+Content-Type: application/json
+
+
+
+
+GET /dogs/:id HTTP/1.1
+Host: my-api
+Content-Type: application/json
+
+POST /dogs HTTP/1.1
+Host: my-api
+Content-Type: application/json
+
+{"name":"Sam JR"}
+
+POST /dogs HTTP/1.1
+Host: my-api
+Content-Type: application/x-www-form-urlencoded
+
+name=Sam JR
+
+POST /dogs HTTP/1.1
+Host: my-api
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Sam JR
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
