@@ -61,6 +61,11 @@ var _ = Describe("Renderer", func() {
 			expectedOutput = readFileContent("tests_data/themes/http_snippets.out")
 		})
 
+		It("should generate a nice indented json", func() {
+			usedTheme = &Theme{Files: []string{"tests_data/themes/indent_json/index.tpl"}}
+			expectedOutput = readFileContent("tests_data/themes/indent_json.out")
+		})
+
 	})
 
 })
