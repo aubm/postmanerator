@@ -139,6 +139,50 @@ Description=
 
 
 
+------------
+ID=1f26facc-4560-11e7-86d4-b3f9d53f63d7
+Name=Create a new dog with urlencoded values
+Description=The family is growing!
+Method=POST
+URL=https://my-api/dogs
+PayloadType=urlencoded
+PayloadRaw=
+PayloadParams
+
+Name=name
+Key=name
+Value=Sam JR
+Description=
+
+PathVariables
+
+Headers
+
+RESPONSES
+
+
+------------
+ID=1f26facc-4560-11e7-86d4-b3f9d53f63d7
+Name=Create a new dog with form values
+Description=The family is growing!
+Method=POST
+URL=https://my-api/dogs
+PayloadType=params
+PayloadRaw=
+PayloadParams
+
+Name=name
+Key=name
+Value=Sam JR
+Description=
+
+PathVariables
+
+Headers
+
+RESPONSES
+
+
 
 
 STRUCTURES

@@ -41,14 +41,19 @@ var _ = Describe("Renderer", func() {
 			Expect(outputWriter.String()).To(Equal(expectedOutput))
 		})
 
-		It("generate a hard coded output", func() {
+		It("should generate a hard coded output", func() {
 			usedTheme = &Theme{Files: []string{"tests_data/themes/hard_coded/index.tpl"}}
 			expectedOutput = readFileContent("tests_data/themes/hard_coded.out")
 		})
 
-		It("generate a simple output", func() {
+		It("should generate a simple output", func() {
 			usedTheme = &Theme{Files: []string{"tests_data/themes/simple/index.tpl"}}
 			expectedOutput = readFileContent("tests_data/themes/simple.out")
+		})
+
+		It("should generate curl snippets", func() {
+			usedTheme = &Theme{Files: []string{"tests_data/themes/curl_snippets/index.tpl"}}
+			expectedOutput = readFileContent("tests_data/themes/curl_snippets.out")
 		})
 
 	})

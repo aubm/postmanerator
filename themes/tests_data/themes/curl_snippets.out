@@ -1,0 +1,14 @@
+
+curl -X GET -H "Content-Type: application/json" "https://my-api/cats"
+
+
+
+
+curl -X GET -H "Content-Type: application/json" "https://my-api/dogs/:id"
+
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Sam JR"}' "https://my-api/dogs"
+
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "name=Sam JR" "https://my-api/dogs"
+
+curl -X POST -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW" -F "name=Sam JR" "https://my-api/dogs"
+
