@@ -13,7 +13,10 @@ import (
 	"github.com/robertkrimen/otto"
 )
 
-var ErrRequestNotFound = errors.New("request not found")
+var (
+	ErrRequestNotFound = errors.New("request not found")
+	ErrFolderNotFound  = errors.New("folder not found")
+)
 
 type CollectionBuilder struct{}
 
@@ -65,26 +68,70 @@ func (c *CollectionBuilder) buildCollectionFromV1(src collectionV1, options Buil
 		collection.Requests = append(collection.Requests, req)
 	}
 
-	for _, folder := range src.Folders {
-		newFolder := Folder{
-			ID:          folder.ID,
-			Name:        folder.Name,
-			Description: folder.Description,
-			Requests:    make([]Request, 0),
-		}
-		for _, requestID := range folder.Order {
-			req, err := c.buildRequest(src, requestID, options)
+	if len(src.FoldersOrder) > 0 {
+		for _, folderID := range src.FoldersOrder {
+
+			folder, err := c.buildFolder(src, folderID, options)
 			if err != nil {
-				return collection, fmt.Errorf("failed to build request %v: %v", requestID, err)
+				return collection, fmt.Errorf("failed to build folder %v: %v", folderID, err)
 			}
-			newFolder.Requests = append(newFolder.Requests, req)
+			collection.Folders = append(collection.Folders, folder)
 		}
-		collection.Folders = append(collection.Folders, newFolder)
+	} else {
+		for _, folder := range src.Folders {
+			newFolder := Folder{
+				ID:          folder.ID,
+				Name:        folder.Name,
+				Description: folder.Description,
+				Requests:    make([]Request, 0),
+			}
+			for _, requestID := range folder.Order {
+				req, err := c.buildRequest(src, requestID, options)
+				if err != nil {
+					return collection, fmt.Errorf("failed to build request %v: %v", requestID, err)
+				}
+				newFolder.Requests = append(newFolder.Requests, req)
+			}
+			collection.Folders = append(collection.Folders, newFolder)
+		}
 	}
 
 	collection.Structures = c.extractStructuresDefinition(src)
 
 	return collection, nil
+}
+
+func (c *CollectionBuilder) buildFolder(colV1 collectionV1, folderID string, options BuilderOptions) (Folder, error) {
+	folder := Folder{}
+
+	fol, ok := c.findFolderByID(colV1, folderID)
+	if !ok {
+		return folder, ErrFolderNotFound
+	}
+
+	folder.ID = fol.ID
+	folder.Name = fol.Name
+	folder.Description = fol.Description
+	folder.Requests = make([]Request, 0)
+
+	for _, requestID := range fol.Order {
+		req, err := c.buildRequest(colV1, requestID, options)
+		if err != nil {
+			return folder, fmt.Errorf("failed to build folder %v: %v", requestID, err)
+		}
+		folder.Requests = append(folder.Requests, req)
+	}
+
+	return folder, nil
+}
+
+func (c *CollectionBuilder) findFolderByID(colV1 collectionV1, id string) (foldersV1, bool) {
+	for _, folder := range colV1.Folders {
+		if folder.ID == id {
+			return folder, true
+		}
+	}
+	return foldersV1{}, false
 }
 
 func (c *CollectionBuilder) buildRequest(colV1 collectionV1, requestID string, options BuilderOptions) (Request, error) {

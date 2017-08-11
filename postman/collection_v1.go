@@ -1,16 +1,19 @@
 package postman
 
 type collectionV1 struct {
+	Name         string      `json:"name"`
+	Description  string      `json:"description"`
+	Order        []string    `json:"order"`
+	Folders      []foldersV1 `json:"folders"`
+	FoldersOrder []string    `json:"folders_order"`
+	Requests     []requestV1 `json:"requests"`
+}
+
+type foldersV1 struct {
+	ID          string   `json:"id"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Order       []string `json:"order"`
-	Folders     []struct {
-		ID          string   `json:"id"`
-		Name        string   `json:"name"`
-		Description string   `json:"description"`
-		Order       []string `json:"order"`
-	} `json:"folders"`
-	Requests []requestV1 `json:"requests"`
 }
 
 type requestV1 struct {
