@@ -1,0 +1,443 @@
+{
+	"id": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+	"name": "Animals API",
+	"description": "Tu autem, Fanni, quod mihi tantum tribui dicis quantum ego nec adgnosco nec postulo, facis amice; sed, ut mihi videris, non recte iudicas de Catone; aut enim nemo, quod quidem magis credo, aut si quisquam, ille sapiens fuit. Quo modo, ut alia omittam, mortem filii tulit! memineram Paulum, videram Galum, sed hi in pueris, Cato in perfecto et spectato viro.\n\nNovitates autem si spem adferunt, ut tamquam in herbis non fallacibus fructus appareat, non sunt illae quidem repudiandae, vetustas tamen suo loco conservanda; maxima est enim vis vetustatis et consuetudinis. Quin in ipso equo, cuius modo feci mentionem, si nulla res impediat, nemo est, quin eo, quo consuevit, libentius utatur quam intractato et novo. Nec vero in hoc quod est animal, sed in iis etiam quae sunt inanima, consuetudo valet, cum locis ipsis delectemur, montuosis etiam et silvestribus, in quibus diutius commorati sumus.",
+	"order": [],
+	"folders": [
+		{
+			"id": "c7c4b729-aa6f-f11e-fd3d-2ea18173e149",
+			"name": "Cats",
+			"description": "Accedebant enim eius asperitati, ubi inminuta vel laesa amplitudo imperii dicebatur, et iracundae suspicionum quantitati proximorum cruentae blanditiae exaggerantium incidentia et dolere inpendio simulantium, si principis periclitetur vita, a cuius salute velut filo pendere statum orbis terrarum fictis vocibus exclamabant.\n\nQuod cum ita sit, paucae domus studiorum seriis cultibus antea celebratae nunc ludibriis ignaviae torpentis exundant, vocali sonu, perflabili tinnitu fidium resultantes. denique pro philosopho cantor et in locum oratoris doctor artium ludicrarum accitur et bybliothecis sepulcrorum ritu in perpetuum clausis organa fabricantur hydraulica, et lyrae ad speciem carpentorum ingentes tibiaeque et histrionici gestus instrumenta non levia.",
+			"order": [
+				"016689a0-3ebd-0570-8fea-adef3365df6a",
+				"b122dc9f-0f8b-86db-0e95-d018e8fa218b",
+				"6e797be7-36cf-2275-f41d-30d5e2e60a36",
+				"10937395-0539-3191-899c-bc4a016c79eb"
+			],
+			"owner": "451199",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"folders_order": []
+		},
+		{
+			"id": "437dcf78-9972-6bc5-430f-081597f95068",
+			"name": "Dogs",
+			"description": "",
+			"order": [
+				"2f429857-ed84-94e0-bad0-aaae61e756c0"
+			],
+			"owner": "451199",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"folders_order": []
+		}
+	],
+	"folders_order": [
+		"c7c4b729-aa6f-f11e-fd3d-2ea18173e149",
+		"437dcf78-9972-6bc5-430f-081597f95068"
+	],
+	"timestamp": 1455837678104,
+	"owner": "451199",
+	"public": false,
+	"requests": [
+		{
+			"id": "016689a0-3ebd-0570-8fea-adef3365df6a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{domain}}/api/cats",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 201\"] = responseCode.code === 201;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502423859583,
+			"name": "Create a new cat",
+			"description": "Quae dum ita struuntur, indicatum est apud Tyrum indumentum regale textum occulte, incertum quo locante vel cuius usibus apparatum. ideoque rector provinciae tunc pater Apollinaris eiusdem nominis ut conscius ductus est aliique congregati sunt ex diversis civitatibus multi, qui atrocium criminum ponderibus urgebantur.",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 201,
+						"name": "Created"
+					},
+					"time": 22,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "0",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Tue, 23 Feb 2016 16:36:18 GMT",
+							"description": "The date and time that the message was sent"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "",
+					"language": "html",
+					"rawDataType": "text",
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceNoPretty": false,
+					"write": true,
+					"empty": false,
+					"failed": false,
+					"id": "7a50ea4e-daaa-9f10-1f96-a13c0dadc9fa",
+					"name": "default",
+					"isSample": true,
+					"scrollToResult": false,
+					"runTests": false,
+					"request": {
+						"url": "http://dockerhost:9999/api/cats",
+						"pathVariableData": [],
+						"queryParams": [],
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"enabled": true,
+								"description": ""
+							}
+						],
+						"headers": "Content-Type: application/json\n",
+						"data": "{\n    \"name\": \"Doctor Frankeinstein\",\n    \"color\": \"brown\"\n}",
+						"method": "POST",
+						"dataMode": "raw"
+					}
+				}
+			],
+			"rawModeData": "{\n    \"name\": \"Doctor Frankeinstein\",\n    \"color\": \"brown\"\n}"
+		},
+		{
+			"id": "10937395-0539-3191-899c-bc4a016c79eb",
+			"headers": "",
+			"url": "http://{{domain}}/api/cats/{{catId}}",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "DELETE",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 204\"] = responseCode.code === 204;\n\n/*[[start postmanerator]]*/\nfunction populateNewAPIStructures() {\n    console.log(\"Et encore un autre fragment :)\");\n}\n/*[[end postmanerator]]*/",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456351906337,
+			"name": "Delete one cat",
+			"description": "Homines enim eruditos et sobrios ut infaustos et inutiles vitant, eo quoque accedente quod et nomenclatores adsueti haec et talia venditare, mercede accepta lucris quosdam et prandiis inserunt subditicios ignobiles et obscuros.",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 204,
+						"name": "No Content",
+						"detail": "The server successfully processed the request, but is not returning any content."
+					},
+					"time": 16,
+					"headers": [
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Tue, 23 Feb 2016 16:36:57 GMT",
+							"description": "The date and time that the message was sent"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "",
+					"language": "html",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceNoPretty": false,
+					"write": true,
+					"empty": false,
+					"failed": false,
+					"isSample": true,
+					"scrollToResult": true,
+					"runTests": true,
+					"id": "ff09c94e-aa94-f16c-b986-7aa687400d52",
+					"name": "default",
+					"request": {
+						"url": "http://dockerhost:9999/api/cats/56cc8a8228a4dbe55ca6e6ec",
+						"headers": [],
+						"data": "",
+						"method": "DELETE",
+						"dataMode": "raw"
+					},
+					"owner": "451199"
+				}
+			],
+			"rawModeData": "",
+			"collection_id": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"folder": "c7c4b729-aa6f-f11e-fd3d-2ea18173e149"
+		},
+		{
+			"id": "2f429857-ed84-94e0-bad0-aaae61e756c0",
+			"headers": "",
+			"headerData": [],
+			"url": "http://{{domain}}/api/dogs/{{dogId}}",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "/*[[start postmanerator]]*/\nfunction populateNewAPIStructures() {\n    APIStructures['dog'] = {\n        name: 'Dog',\n        description: 'A greater animal',\n        fields: [\n            {name: 'id', description: 'A unique identifier for the dog', type: 'int'},\n            {name: 'color', description: 'The color of the dog', type: 'string'},\n            {name: 'name', description: 'The name of the dog', type: 'string'}\n        ]\n    };\n}\n/*[[end postmanerator]]*/",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502425137337,
+			"name": "Get one dog",
+			"description": "Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"responses": []
+		},
+		{
+			"id": "6e797be7-36cf-2275-f41d-30d5e2e60a36",
+			"headers": "Age: 30\nCache-Control: no-cache\nContent-Encoding: gzip\nPragma: no-cache\n",
+			"headerData": [
+				{
+					"key": "Age",
+					"value": "30",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Cache-Control",
+					"value": "no-cache",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Encoding",
+					"value": "gzip",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Pragma",
+					"value": "no-cache",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{domain}}/api/cats/:catId",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {
+				"catId": ""
+			},
+			"pathVariableData": [
+				{
+					"key": "catId",
+					"value": ""
+				}
+			],
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "var jsonData = JSON.parse(responseBody);\n\ntests[\"expect name\"] = jsonData.name === \"Doctor Frankeinstein\";\ntests[\"expect color\"] = jsonData.color === \"brown\";\n\n/*[[start postmanerator]]*/\nfunction populateNewAPIStructures() {\n    APIStructures['cat'] = {\n        name: 'Cat',\n        description: 'A great animal',\n        fields: [\n            {name: 'id', description: 'A unique identifier for the cat', type: 'int'},\n            {name: 'color', description: 'The color of the cat', type: 'string'},\n            {name: 'name', description: 'The name of the cat', type: 'string'}\n        ]\n    };\n}\n/*[[end postmanerator]]*/",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502426089998,
+			"name": "Get one cat",
+			"description": "Ciliciam vero, quae Cydno amni exultat, Tarsus nobilitat, urbs perspicabilis hanc condidisse Perseus memoratur, Iovis filius et Danaes, vel certe ex Aethiopia profectus Sandan quidam nomine vir opulentus et nobilis et Anazarbus auctoris vocabulum referens, et Mopsuestia vatis illius domicilium Mopsi, quem a conmilitio Argonautarum cum aureo vellere direpto redirent, errore abstractum delatumque ad Africae litus mors repentina consumpsit, et ex eo cespite punico tecti manes eius heroici dolorum varietati medentur plerumque sospitales.",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 200,
+						"name": "OK",
+						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action."
+					},
+					"time": 15,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "79",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Tue, 23 Feb 2016 16:36:44 GMT",
+							"description": "The date and time that the message was sent"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "{\"id\":\"56cc8a8228a4dbe55ca6e6ec\",\"name\":\"Doctor Frankeinstein\",\"color\":\"brown\"}",
+					"language": "javascript",
+					"rawDataType": "text",
+					"state": {
+						"size": "normal"
+					},
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceNoPretty": false,
+					"write": true,
+					"empty": false,
+					"failed": false,
+					"isSample": true,
+					"scrollToResult": true,
+					"runTests": true,
+					"id": "a99b3d5c-48e8-c760-d9cc-1fd448615929",
+					"name": "default",
+					"request": {
+						"url": "http://dockerhost:9999/api/cats/56cc8a8228a4dbe55ca6e6ec",
+						"headers": [],
+						"data": "{\n    \"name\": \"Doctor Frankeinstein\",\n    \"color\": \"brown\"\n}",
+						"method": "GET",
+						"dataMode": "params"
+					},
+					"owner": "451199"
+				}
+			]
+		},
+		{
+			"id": "b122dc9f-0f8b-86db-0e95-d018e8fa218b",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://{{domain}}/api/cats",
+			"queryParams": [],
+			"preRequestScript": "",
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [
+				{
+					"key": "name\"",
+					"value": "Doctor Frankeinstein",
+					"type": "text",
+					"enabled": true,
+					"description": ""
+				},
+				{
+					"key": "color",
+					"value": "brown",
+					"type": "text",
+					"enabled": true,
+					"description": ""
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": "tests[\"Status code is 201\"] = responseCode.code === 201;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502425196617,
+			"name": "Create a new cat form",
+			"description": "Quae dum ita struuntur, indicatum est apud Tyrum indumentum regale textum occulte, incertum quo locante vel cuius usibus apparatum. ideoque rector provinciae tunc pater Apollinaris eiusdem nominis ut conscius ductus est aliique congregati sunt ex diversis civitatibus multi, qui atrocium criminum ponderibus urgebantur.",
+			"collectionId": "1d86c4c1-1ba0-7818-107f-ef5b015f207a",
+			"responses": [
+				{
+					"status": "",
+					"responseCode": {
+						"code": 201,
+						"name": "Created"
+					},
+					"time": 22,
+					"headers": [
+						{
+							"name": "Content-Length",
+							"key": "Content-Length",
+							"value": "0",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"name": "Content-Type",
+							"key": "Content-Type",
+							"value": "text/plain; charset=utf-8",
+							"description": "The mime type of this content"
+						},
+						{
+							"name": "Date",
+							"key": "Date",
+							"value": "Tue, 23 Feb 2016 16:36:18 GMT",
+							"description": "The date and time that the message was sent"
+						}
+					],
+					"cookies": [],
+					"mime": "",
+					"text": "",
+					"language": "html",
+					"rawDataType": "text",
+					"previewType": "html",
+					"searchResultScrolledTo": -1,
+					"forceNoPretty": false,
+					"write": true,
+					"empty": false,
+					"failed": false,
+					"id": "319c99ba-3198-b41c-803e-6bfd0e7290f4",
+					"name": "default",
+					"isSample": true,
+					"scrollToResult": false,
+					"runTests": false,
+					"request": "b122dc9f-0f8b-86db-0e95-d018e8fa218b",
+					"requestObject": {
+						"url": "http://dockerhost:9999/api/cats",
+						"pathVariableData": [],
+						"queryParams": [],
+						"headerData": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"enabled": true,
+								"description": ""
+							}
+						],
+						"headers": "Content-Type: application/json\n",
+						"data": "{\n    \"name\": \"Doctor Frankeinstein\",\n    \"color\": \"brown\"\n}",
+						"method": "POST",
+						"dataMode": "raw"
+					}
+				}
+			]
+		}
+	]
+}

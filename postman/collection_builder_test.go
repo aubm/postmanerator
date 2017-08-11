@@ -21,15 +21,30 @@ func TestExtractStructuresDefinition(t *testing.T) {
 		}},
 	}
 
-	// When
-	col, err := builder.FromFile("tests_data/collection-01.json", BuilderOptions{})
-
-	// Then
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
+	builderOptions := BuilderOptions{
+		EnvironmentVariables: Environment{
+			"domain": "localhost",
+			"catId":  "1",
+			"dogId":  "1",
+		},
 	}
-	if reflect.DeepEqual(col.Structures, expectedStructures) == false {
-		t.Errorf("Collection structures definition were not properly extracted, expected %v, got %v",
-			expectedStructures, col.Structures)
+
+	testFiles := []string{
+		"tests_data/collection-01.json",
+		"tests_data/collection-02.json",
+	}
+
+	for _, testFile := range testFiles {
+		// When
+		col, err := builder.FromFile(testFile, builderOptions)
+
+		// Then
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+		if reflect.DeepEqual(col.Structures, expectedStructures) == false {
+			t.Errorf("Collection structures definition were not properly extracted, expected %v, got %v",
+				expectedStructures, col.Structures)
+		}
 	}
 }
