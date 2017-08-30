@@ -235,6 +235,16 @@ Alternatively, you can download the source code and compile it by hand. The Go p
 - Download Postmanerator using go get: `go get github.com/aubm/postmanerator`
 - Finally, generate the binary with `go install`
 
+There is also a community maintained docker image available, simply run:
+
+```
+docker run \
+-v [YOUR-PROJECT-PATH]:/usr/var \
+hughmp/postmanerator:latest \
+-collection /usr/var/[YOUR-COLLECTION.JSON] \
+-output /usr/var/[YOUR-HTML.html]
+```
+
 ## Contributing
 
 Contributions are welcome. Please refer to the [contributions guidelines](CONTRIBUTING.md) for more information.
