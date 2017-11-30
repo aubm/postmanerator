@@ -20,6 +20,7 @@ var (
 	themeRenderer      = &themes.Renderer{}
 	gitAgent           = &utils.GitAgent{}
 	collectionBuilder  = &postman.CollectionBuilder{}
+	collectionV1Parser = &postman.CollectionV1Parser{}
 	environmentBuilder = &postman.EnvironmentBuilder{}
 	defaultCommand     = &commands.Default{}
 	getThemeCommand    = &commands.GetTheme{}
@@ -35,9 +36,10 @@ func init() {
 func _init() error {
 	configuration.Init()
 	if err := inject.Populate(config, themeManager, defaultCommand, getThemeCommand, deleteThemeCommand,
-		listThemesCommand, gitAgent, themeRenderer, collectionBuilder, environmentBuilder); err != nil {
+		listThemesCommand, gitAgent, themeRenderer, collectionBuilder, collectionV1Parser, environmentBuilder); err != nil {
 		return fmt.Errorf("app initialization failed: %v", err)
 	}
+	collectionBuilder.Parsers = append(collectionBuilder.Parsers, collectionV1Parser)
 	availableCommands = append(availableCommands,
 		defaultCommand,
 		getThemeCommand,

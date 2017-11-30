@@ -20,6 +20,7 @@ type Request struct {
 	PathVariables []KeyValuePair
 	Headers       []KeyValuePair
 	Responses     []Response
+	Tests         string
 }
 
 type Response struct {
@@ -35,6 +36,7 @@ type Folder struct {
 	ID          string
 	Name        string
 	Description string
+	Folders     []Folder
 	Requests    []Request
 }
 
