@@ -1,7 +1,7 @@
 package themes
 
-import "github.com/russross/blackfriday"
+import "gopkg.in/russross/blackfriday.v2"
 
 func helperMarkdown(input string) string {
-	return string(blackfriday.MarkdownCommon([]byte(input)))
+	return string(blackfriday.Run([]byte(input)))
 }

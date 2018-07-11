@@ -1,3 +1,14 @@
+FROM golang:latest
+WORKDIR /go/src/github.com/srgrn/postmanerator
+
+COPY Gopkg.toml .
+COPY Gopkg.lock .
+RUN go get -u github.com/golang/dep/cmd/dep
+RUN dep ensure -vendor-only
+COPY . /go/src/github.com/srgrn/postmanerator
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o postmanerator .
+
+
 FROM alpine:3.6
 
 ARG http_proxy
@@ -18,13 +29,9 @@ RUN apk update \
     fi \
  && git clone https://github.com/aubm/postmanerator-default-theme.git default \
  && git clone https://github.com/zanaca/postmanerator-hu-theme.git hu \
- && git clone https://github.com/aubm/postmanerator-markdown-theme.git markdown \
- && cd /usr/bin/ \
- && if [ "${verify_ssl}" = "n" ]; \
-    then wget -O postmanerator https://github.com/aubm/postmanerator/releases/download/v0.8.0/postmanerator_linux_386 --no-check-certificate; \
-    else wget -O postmanerator https://github.com/aubm/postmanerator/releases/download/v0.8.0/postmanerator_linux_386; \
-    fi \
- && chmod +x postmanerator
+ && git clone https://github.com/aubm/postmanerator-markdown-theme.git markdown
+
+COPY --from=0 /go/src/github.com/srgrn/postmanerator/postmanerator /usr/bin/
 
 ENTRYPOINT ["postmanerator"]
 CMD ["-collection", "/usr/var/collection.json"]
