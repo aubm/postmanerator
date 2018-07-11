@@ -11,8 +11,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/srgrn/postmanerator/configuration"
-	"github.com/srgrn/postmanerator/utils"
+	"github.com/aubm/postmanerator/configuration"
+	"github.com/aubm/postmanerator/utils"
 )
 
 var (

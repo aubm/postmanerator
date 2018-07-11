@@ -5,3 +5,4 @@ doc.md
 collection.json
 .cover
 *.coverprofile
+vendor/

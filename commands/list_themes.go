@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/srgrn/postmanerator/configuration"
+	"github.com/aubm/postmanerator/configuration"
 )
 
 type ListThemes struct {

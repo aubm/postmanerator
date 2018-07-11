@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/srgrn/postmanerator/postman"
+	"github.com/aubm/postmanerator/postman"
 )
 
 func curlSnippet(request postman.Request) string {

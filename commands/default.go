@@ -6,11 +6,11 @@ import (
 	"io"
 	"os"
 
+	"github.com/aubm/postmanerator/configuration"
+	"github.com/aubm/postmanerator/postman"
+	"github.com/aubm/postmanerator/themes"
 	"github.com/fatih/color"
 	"github.com/howeyc/fsnotify"
-	"github.com/srgrn/postmanerator/configuration"
-	"github.com/srgrn/postmanerator/postman"
-	"github.com/srgrn/postmanerator/themes"
 )
 
 type Default struct {

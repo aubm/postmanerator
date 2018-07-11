@@ -1,6 +1,6 @@
 package themes_test
 
-import "github.com/srgrn/postmanerator/postman"
+import "github.com/aubm/postmanerator/postman"
 
 var exampleCollection = postman.Collection{
 	Name:        "My Collection",

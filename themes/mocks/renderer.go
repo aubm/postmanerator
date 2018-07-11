@@ -3,8 +3,8 @@ package mocks_test
 import (
 	"io"
 
-	"github.com/srgrn/postmanerator/postman"
-	. "github.com/srgrn/postmanerator/themes"
+	"github.com/aubm/postmanerator/postman"
+	. "github.com/aubm/postmanerator/themes"
 	"github.com/stretchr/testify/mock"
 )
 

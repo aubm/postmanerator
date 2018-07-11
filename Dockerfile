@@ -1,11 +1,11 @@
 FROM golang:latest
-WORKDIR /go/src/github.com/srgrn/postmanerator
+WORKDIR /go/src/github.com/aubm/postmanerator
 
 COPY Gopkg.toml .
 COPY Gopkg.lock .
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN dep ensure -vendor-only
-COPY . /go/src/github.com/srgrn/postmanerator
+COPY . /go/src/github.com/aubm/postmanerator
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o postmanerator .
 
 
@@ -31,7 +31,7 @@ RUN apk update \
  && git clone https://github.com/zanaca/postmanerator-hu-theme.git hu \
  && git clone https://github.com/aubm/postmanerator-markdown-theme.git markdown
 
-COPY --from=0 /go/src/github.com/srgrn/postmanerator/postmanerator /usr/bin/
+COPY --from=0 /go/src/github.com/aubm/postmanerator/postmanerator /usr/bin/
 
 ENTRYPOINT ["postmanerator"]
 CMD ["-collection", "/usr/var/collection.json"]
