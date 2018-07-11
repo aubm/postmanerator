@@ -4,7 +4,7 @@ import (
 	"io"
 	"text/template"
 
-	"github.com/aubm/postmanerator/postman"
+	"github.com/srgrn/postmanerator/postman"
 )
 
 const (
@@ -29,6 +29,7 @@ func (r *Renderer) getTemplateHelpers() template.FuncMap {
 		"hasContent":   helperHasContent,
 		"httpSnippet":  helperHttpSnippet,
 		"indentJSON":   helperIndentJSON,
+		"indent":       helperIndent,
 		"inline":       helperInline,
 		"markdown":     helperMarkdown,
 		"slugify":      helperSlugify,

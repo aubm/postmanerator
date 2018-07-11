@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/aubm/postmanerator/configuration"
 	"github.com/fatih/color"
+	"github.com/srgrn/postmanerator/configuration"
 )
 
 type DeleteTheme struct {

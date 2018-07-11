@@ -1,7 +1,7 @@
 package mocks_test
 
 import (
-	. "github.com/aubm/postmanerator/themes"
+	. "github.com/srgrn/postmanerator/themes"
 	"github.com/stretchr/testify/mock"
 )
 

@@ -7,13 +7,13 @@ import (
 	"os"
 	"path"
 
-	"github.com/aubm/postmanerator/configuration"
-	. "github.com/aubm/postmanerator/themes"
-	"github.com/aubm/postmanerator/utils"
-	. "github.com/aubm/postmanerator/utils/mocks"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	uuid "github.com/satori/go.uuid"
+	"github.com/srgrn/postmanerator/configuration"
+	. "github.com/srgrn/postmanerator/themes"
+	"github.com/srgrn/postmanerator/utils"
+	. "github.com/srgrn/postmanerator/utils/mocks"
 	"github.com/stretchr/testify/mock"
 )
 
