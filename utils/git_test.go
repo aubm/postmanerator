@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 
-	. "github.com/aubm/postmanerator/utils"
+	. "github.com/srgrn/postmanerator/utils"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

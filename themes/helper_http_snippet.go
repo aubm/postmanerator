@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aubm/postmanerator/postman"
+	"github.com/srgrn/postmanerator/postman"
 )
 
 func helperHttpSnippet(request postman.Request) (httpSnippet string) {

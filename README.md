@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/aubm/postmanerator.svg?branch=master)](https://travis-ci.org/aubm/postmanerator) [![Coverage Status](https://coveralls.io/repos/github/aubm/postmanerator/badge.svg?branch=master)](https://coveralls.io/github/aubm/postmanerator?branch=master)
+[![Build Status](https://travis-ci.org/aubm/postmanerator.svg?branch=master)](https://travis-ci.org/aubm/postmanerator) [![Coverage Status](https://coveralls.io/repos/github/srgrn/postmanerator/badge.svg?branch=master)](https://coveralls.io/github/aubm/postmanerator?branch=master)
 
 ## What is it?
 
@@ -8,7 +8,7 @@ Some guy said:
 
 Well guess what some guy, now you can use Postmanerator to do so! Can I?
 
-Just download the [latest release on Github](https://github.com/aubm/postmanerator/releases/latest). You obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you might want to rename it to simply `postmanerator`.
+Just download the [latest release on Github](https://github.com/srgrn/postmanerator/releases/latest). You obviously need to pick the right binary depending on your environment. Then place that binary somewhere in your system that is in your PATH, you might want to rename it to simply `postmanerator`.
 
 Afterwards, export your Postman collection, let's say in `$YOUR_PROJECT/postman/collection.json` and simply run:
 
@@ -227,7 +227,7 @@ As a workaround, Postmanerator provides the `hasContent` helper which can be use
 
 ## Installation
 
-As said in the introduction, the easiest way to get it installed for now is to download the latest appropriate [release on Github](https://github.com/aubm/postmanerator/releases/latest), depending on your system. Then copy it somewhere in your PATH, renaming it to `postmanerator`.
+As said in the introduction, the easiest way to get it installed for now is to download the latest appropriate [release on Github](https://github.com/srgrn/postmanerator/releases/latest), depending on your system. Then copy it somewhere in your PATH, renaming it to `postmanerator`.
 
 Alternatively, you can download the source code and compile it by hand. The Go programming language has to be installed on your machine for that.
 
