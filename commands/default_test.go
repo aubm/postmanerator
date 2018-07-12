@@ -8,16 +8,16 @@ import (
 	"os"
 	"path"
 
-	. "github.com/aubm/postmanerator/commands"
-	"github.com/aubm/postmanerator/configuration"
-	"github.com/aubm/postmanerator/postman"
-	. "github.com/aubm/postmanerator/postman/mocks"
-	"github.com/aubm/postmanerator/themes"
-	. "github.com/aubm/postmanerator/themes/mocks"
 	"github.com/fatih/color"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/satori/go.uuid"
+	. "github.com/srgrn/postmanerator/commands"
+	"github.com/srgrn/postmanerator/configuration"
+	"github.com/srgrn/postmanerator/postman"
+	. "github.com/srgrn/postmanerator/postman/mocks"
+	"github.com/srgrn/postmanerator/themes"
+	. "github.com/srgrn/postmanerator/themes/mocks"
 	"github.com/stretchr/testify/mock"
 )
 

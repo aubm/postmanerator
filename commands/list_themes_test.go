@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 
-	. "github.com/aubm/postmanerator/commands"
-	"github.com/aubm/postmanerator/configuration"
-	. "github.com/aubm/postmanerator/themes/mocks"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/srgrn/postmanerator/commands"
+	"github.com/srgrn/postmanerator/configuration"
+	. "github.com/srgrn/postmanerator/themes/mocks"
 )
 
 var _ = Describe("ListThemes", func() {
