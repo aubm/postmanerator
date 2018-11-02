@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"sort"
 	"time"
 
 	"github.com/aubm/postmanerator/configuration"
@@ -42,6 +43,8 @@ func (m *Manager) List() ([]string, error) {
 	for _, themeDir := range themeDirs {
 		themeList = append(themeList, themeDir.Name())
 	}
+
+	sort.Strings(themeList)
 
 	return themeList, nil
 }
@@ -171,6 +174,8 @@ func (m *Manager) listThemeFiles(themePath string) ([]string, error) {
 			themeFiles = append(themeFiles, file)
 		}
 	}
+
+	sort.Strings(themeFiles)
 
 	return themeFiles, nil
 }
