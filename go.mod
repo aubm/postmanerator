@@ -13,10 +13,12 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/onsi/ginkgo v1.6.0
 	github.com/onsi/gomega v1.4.2
+	github.com/pkg/errors v0.8.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d
 	github.com/russross/blackfriday v1.5.2
 	github.com/satori/go.uuid v1.2.0
+	github.com/sergi/go-diff v1.0.0
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.2.2
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
