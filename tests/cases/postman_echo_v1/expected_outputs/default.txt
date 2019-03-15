@@ -1,4 +1,5 @@
 Name: Postman Echo
+
 Description: Postman Echo is service you can use to test your REST clients and make sample API calls. It provides endpoints for `GET`, `POST`, `PUT`, various auth mechanisms and other utility endpoints.
 
 The documentation for the endpoints as well as example responses can be found at [https://echo.getpostman.com](https://echo.getpostman.com?source=echo-collection-app-onboarding)
@@ -8,3 +9,29 @@ Name    | Age
 --------|------
 Bob     | 27
 Alice   | 23
+
+Markdown description:
+<p>Postman Echo is service you can use to test your REST clients and make sample API calls. It provides endpoints for <code>GET</code>, <code>POST</code>, <code>PUT</code>, various auth mechanisms and other utility endpoints.</p>
+
+<p>The documentation for the endpoints as well as example responses can be found at <a href="https://echo.getpostman.com?source=echo-collection-app-onboarding">https://echo.getpostman.com</a></p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Age</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Bob</td>
+<td>27</td>
+</tr>
+
+<tr>
+<td>Alice</td>
+<td>23</td>
+</tr>
+</tbody>
+</table>
