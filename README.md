@@ -16,7 +16,7 @@ Afterwards, export your Postman collection, let's say in `$YOUR_PROJECT/postman/
 postmanerator -output=./doc.html -collection=$YOUR_PROJECT/postman/collection.json
 ```
 
-Or, if you're using Windows:
+Or, if you're using Windows Powershell:
 
 ```
 postmanerator --output=./doc.html --collection=$YOUR_PROJECT/postman/collection.json
