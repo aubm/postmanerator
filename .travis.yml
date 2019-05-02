@@ -6,6 +6,8 @@ env:
     secure: EI1uZ9aRkZCAft/nMn9lJiEX+UQ4DiN7UdH+Ot94Ad5PQSbqy/P9rl8oStFub/EU+W/R+LpTpn3x7wIRu78v0ITzhsbmhRY2JRa3G10GMykOL6U6kBb23uIJepfbYypKNnjoraZ/su7VPbBaUkecDBkexO9p14yENvIl2gy3BUXeJRgdALiRn+C5CC0PKsiX437WHlYCk3rSZdSe0EUtyqoNqoFslU4lHnDBO4WWgqe3wEcksruFk6dDDKZB3SvezJzCfpif344J46qXlM5pKwx0ytjCEV0pzL85i6XlmXIL/STUWnwUjMjid/RZfXndb9QnL90lgS1eALzMM4VH7wnbhtWcNNrFWv/rTbFvSxvIkBrAv1YU562w8ESGS+q/a+PyWUb1zVx9tLjf/U3qjfDx7p8tlcSE8AHw8HN4P4dqZLNC+47rGBzJZpYd+MIYy8mMo+s9GDWaypKAqLLtwuWL8KGm6HGyVn3yW+mEugpISl8/BFhqHl5z6B87yM3nq1k9d70DD12JLtt6s5Niu7h0PbPlrV9DqNPSvMI8C+kfYrBelLbrdJrvu6ImprB8Sb/q+AKRIrqBZF3KKIi/5zmRo++f0j8vMEv1qAIM5hMcZUlbmzSzgCw5e7FbiH7Wy4GerGlamTvwRkVMEVlM1wtM9R9ER5lYm6ZylwQoCZM=
 before_install:
 - go get github.com/mattn/goveralls
+install:
+- env GO111MODULE=on go mod download
 script:
 - env GO111MODULE=on go install
 - env GO111MODULE=on go test ./... -coverprofile=cover.out
