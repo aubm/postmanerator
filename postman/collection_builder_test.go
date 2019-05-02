@@ -8,7 +8,7 @@ import (
 func TestExtractStructuresDefinition(t *testing.T) {
 	// Given
 	builder := &CollectionBuilder{}
-	builder.Parsers = append(builder.Parsers, &CollectionV1Parser{})
+	builder.Parsers = append(builder.Parsers, &CollectionV210Parser{})
 	expectedStructures := []StructureDefinition{
 		{Name: "Cat", Description: "A great animal", Fields: []StructureFieldDefinition{
 			{Name: "id", Description: "A unique identifier for the cat", Type: "int"},

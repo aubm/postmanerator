@@ -14,19 +14,19 @@ import (
 )
 
 var (
-	config             = configuration.Config
-	errUnknownCmd      = fmt.Errorf("Command not found, please see the documentation at https://github.com/aubm/postmanerator")
-	themeManager       = &themes.Manager{}
-	themeRenderer      = &themes.Renderer{}
-	gitAgent           = &utils.GitAgent{}
-	collectionBuilder  = &postman.CollectionBuilder{}
-	collectionV1Parser = &postman.CollectionV1Parser{}
-	environmentBuilder = &postman.EnvironmentBuilder{}
-	defaultCommand     = &commands.Default{}
-	getThemeCommand    = &commands.GetTheme{}
-	deleteThemeCommand = &commands.DeleteTheme{}
-	listThemesCommand  = &commands.ListThemes{}
-	availableCommands  = []commands.Command{}
+	config               = configuration.Config
+	errUnknownCmd        = fmt.Errorf("Command not found, please see the documentation at https://github.com/aubm/postmanerator")
+	themeManager         = &themes.Manager{}
+	themeRenderer        = &themes.Renderer{}
+	gitAgent             = &utils.GitAgent{}
+	collectionBuilder    = &postman.CollectionBuilder{}
+	collectionV210Parser = &postman.CollectionV210Parser{}
+	environmentBuilder   = &postman.EnvironmentBuilder{}
+	defaultCommand       = &commands.Default{}
+	getThemeCommand      = &commands.GetTheme{}
+	deleteThemeCommand   = &commands.DeleteTheme{}
+	listThemesCommand    = &commands.ListThemes{}
+	availableCommands    = []commands.Command{}
 )
 
 func init() {
@@ -36,10 +36,10 @@ func init() {
 func _init() error {
 	configuration.Init()
 	if err := inject.Populate(config, themeManager, defaultCommand, getThemeCommand, deleteThemeCommand,
-		listThemesCommand, gitAgent, themeRenderer, collectionBuilder, collectionV1Parser, environmentBuilder); err != nil {
+		listThemesCommand, gitAgent, themeRenderer, collectionBuilder, collectionV210Parser, environmentBuilder); err != nil {
 		return fmt.Errorf("app initialization failed: %v", err)
 	}
-	collectionBuilder.Parsers = append(collectionBuilder.Parsers, collectionV1Parser)
+	collectionBuilder.Parsers = append(collectionBuilder.Parsers, collectionV210Parser)
 	availableCommands = append(availableCommands,
 		defaultCommand,
 		getThemeCommand,
