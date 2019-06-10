@@ -116,6 +116,7 @@ func (p *CollectionV210Parser) parseRequestPayloadParams(item collectionV210Item
 			Name:        pair.Key,
 			Key:         pair.Key,
 			Value:       pair.Value,
+			Src:         pair.Src,
 			Description: pair.Description,
 		})
 	}

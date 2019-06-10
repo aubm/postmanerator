@@ -49,5 +49,6 @@ type collectionV210Event struct {
 type collectionV210KeyValuePair struct {
 	Key         string      `json:"key"`
 	Value       interface{} `json:"value"`
+	Src         string      `json:"src"`
 	Description string      `json:"description"`
 }
