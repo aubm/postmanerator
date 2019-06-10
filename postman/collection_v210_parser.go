@@ -58,7 +58,7 @@ func (p *CollectionV210Parser) computeItem(parentFolder *Folder, items []collect
 			request := Request{
 				ID:            uuid.NewV4().String(),
 				Name:          item.Name,
-				Description:   item.Description,
+				Description:   item.Request.Description,
 				Method:        item.Request.Method,
 				URL:           item.Request.Url.Raw,
 				PayloadType:   item.Request.Body.Mode,
