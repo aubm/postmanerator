@@ -45,8 +45,9 @@ func (p *CollectionV210Parser) buildCollection(src collectionV210, options Build
 func (p *CollectionV210Parser) computeItem(parentFolder *Folder, items []collectionV210Item, options BuilderOptions) error {
 	for _, item := range items {
 		if item.Request == nil { // item is a folder
+			u, _ := uuid.NewV4()
 			folder := Folder{
-				ID:          uuid.NewV4().String(),
+				ID:          u.String(),
 				Description: item.Description,
 				Name:        item.Name,
 			}
@@ -55,8 +56,9 @@ func (p *CollectionV210Parser) computeItem(parentFolder *Folder, items []collect
 			}
 			parentFolder.Folders = append(parentFolder.Folders, folder)
 		} else { // item is a request
+			u, _ := uuid.NewV4()
 			request := Request{
-				ID:            uuid.NewV4().String(),
+				ID:            u.String(),
 				Name:          item.Name,
 				Description:   item.Request.Description,
 				Method:        item.Request.Method,
@@ -146,8 +148,9 @@ func (p *CollectionV210Parser) parseRequestResponses(item collectionV210Item, op
 	responses := make([]Response, 0)
 
 	for _, resp := range item.Response {
+		u, _ := uuid.NewV4()
 		responses = append(responses, Response{
-			ID:         uuid.NewV4().String(),
+			ID:         u.String(),
 			Name:       resp.Name,
 			Body:       resp.Body,
 			Status:     resp.Status,
