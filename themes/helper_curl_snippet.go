@@ -39,6 +39,10 @@ func curlSnippet(request postman.Request) string {
 				for _, data := range request.PayloadParams {
 					curlSnippet += fmt.Sprintf(` -F "%v=%v"`, data.Key, data.Value)
 				}
+			} else if request.PayloadType == "formdata" {
+				for _, data := range request.PayloadParams {
+					curlSnippet += fmt.Sprintf(` -F "%v=@%v"`, data.Key, data.Src)
+				}
 			}
 		}
 	}

@@ -57,4 +57,5 @@ type KeyValuePair struct {
 	Key         string
 	Value       interface{}
 	Description string
+	Src         string
 }
