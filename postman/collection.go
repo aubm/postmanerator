@@ -31,6 +31,7 @@ type Response struct {
 	StatusCode int
 	Body       string
 	Headers    []KeyValuePair
+	Request    Request
 }
 
 type Folder struct {

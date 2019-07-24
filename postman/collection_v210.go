@@ -31,11 +31,27 @@ type collectionV210Item struct {
 		Description string `json:"description"`
 	} `json:"request,omitempty"`
 	Response []struct {
-		Name   string                       `json:"name"`
-		Status string                       `json:"status"`
-		Code   int                          `json:"code"`
-		Header []collectionV210KeyValuePair `json:"header"`
-		Body   string                       `json:"body"`
+		Name    string                       `json:"name"`
+		Status  string                       `json:"status"`
+		Code    int                          `json:"code"`
+		Header  []collectionV210KeyValuePair `json:"header"`
+		Request *struct {
+			Method string                       `json:"method"`
+			Header []collectionV210KeyValuePair `json:"header"`
+			Body   struct {
+				Mode       string                       `json:"mode"`
+				Raw        string                       `json:"raw"`
+				FormData   []collectionV210KeyValuePair `json:"formdata,omitempty"`
+				UrlEncoded []collectionV210KeyValuePair `json:"urlencoded,omitempty"`
+			} `json:"body"`
+			Url struct {
+				Raw      string                       `json:"raw"`
+				Variable []collectionV210KeyValuePair `json:"variable"`
+				Query    []collectionV210KeyValuePair `json:"query"`
+			} `json:"url"`
+			Description string `json:"description"`
+		} `json:"originalRequest,omitempty"`
+		Body string `json:"body"`
 	} `json:"response"`
 }
 

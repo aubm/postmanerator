@@ -161,6 +161,8 @@ func (p *CollectionV210Parser) parseRequestResponses(item collectionV210Item, op
 	responses := make([]Response, 0)
 
 	for _, resp := range item.Response {
+		var req collectionV210Item
+		req.Request = resp.Request
 		responses = append(responses, Response{
 			ID:         uuid.NewV4().String(),
 			Name:       resp.Name,
@@ -168,6 +170,17 @@ func (p *CollectionV210Parser) parseRequestResponses(item collectionV210Item, op
 			Status:     resp.Status,
 			StatusCode: resp.Code,
 			Headers:    p.parseResponseHeaders(resp.Header, options),
+			Request: Request{
+				Description:   resp.Request.Description,
+				Method:        resp.Request.Method,
+				URL:           resp.Request.Url.Raw,
+				PayloadType:   resp.Request.Body.Mode,
+				PayloadRaw:    resp.Request.Body.Raw,
+				QueryParams:   p.parseRequestQueryParams(req),
+				PathVariables: p.parseRequestPathVariables(req),
+				PayloadParams: p.parseRequestPayloadParams(req),
+				Headers:       p.parseRequestHeaders(req, options),
+			},
 		})
 	}
 
