@@ -26,6 +26,7 @@ type collectionV210Item struct {
 		Url struct {
 			Raw      string                       `json:"raw"`
 			Variable []collectionV210KeyValuePair `json:"variable"`
+			Query    []collectionV210KeyValuePair `json:"query"`
 		} `json:"url"`
 		Description string `json:"description"`
 	} `json:"request,omitempty"`

@@ -16,6 +16,7 @@ type Request struct {
 	URL           string
 	PayloadType   string
 	PayloadRaw    string
+	QueryParams   []KeyValuePair
 	PayloadParams []KeyValuePair
 	PathVariables []KeyValuePair
 	Headers       []KeyValuePair

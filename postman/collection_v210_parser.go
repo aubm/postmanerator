@@ -64,6 +64,7 @@ func (p *CollectionV210Parser) computeItem(parentFolder *Folder, items []collect
 				PayloadType:   item.Request.Body.Mode,
 				PayloadRaw:    item.Request.Body.Raw,
 				Tests:         p.parseRequestTests(item),
+				QueryParams:   p.parseRequestQueryParams(item),
 				PathVariables: p.parseRequestPathVariables(item),
 				PayloadParams: p.parseRequestPayloadParams(item),
 				Headers:       p.parseRequestHeaders(item, options),
@@ -98,6 +99,21 @@ func (p *CollectionV210Parser) parseRequestPathVariables(item collectionV210Item
 	}
 
 	return pathVariables
+}
+
+func (p *CollectionV210Parser) parseRequestQueryParams(item collectionV210Item) []KeyValuePair {
+	queryVariables := make([]KeyValuePair, 0)
+
+	for _, variable := range item.Request.Url.Query {
+		queryVariables = append(queryVariables, KeyValuePair{
+			Name:        variable.Key,
+			Key:         variable.Key,
+			Value:       variable.Value,
+			Description: variable.Description,
+		})
+	}
+
+	return queryVariables
 }
 
 func (p *CollectionV210Parser) parseRequestPayloadParams(item collectionV210Item) []KeyValuePair {
