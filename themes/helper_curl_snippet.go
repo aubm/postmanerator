@@ -16,7 +16,7 @@ func curlSnippet(request postman.Request) string {
 	if payloadReady.MatchString(request.Method) {
 		if request.PayloadType == "urlencoded" {
 			curlSnippet += ` -H "Content-Type: application/x-www-form-urlencoded"`
-		} else if request.PayloadType == "params" {
+		} else if request.PayloadType == "params" || request.PayloadType == "formdata" {
 			curlSnippet += ` -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"`
 		}
 	}
@@ -35,7 +35,7 @@ func curlSnippet(request postman.Request) string {
 					dataList = append(dataList, fmt.Sprintf("%v=%v", data.Key, data.Value))
 				}
 				curlSnippet += fmt.Sprintf(` -d "%v"`, strings.Join(dataList, "&"))
-			} else if request.PayloadType == "params" {
+			} else if request.PayloadType == "params" || request.PayloadType == "formdata" {
 				for _, data := range request.PayloadParams {
 					curlSnippet += fmt.Sprintf(` -F "%v=%v"`, data.Key, data.Value)
 				}

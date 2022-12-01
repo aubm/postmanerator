@@ -47,7 +47,7 @@ Content-Type: application/x-www-form-urlencoded
 %v`, strings.Join(dataList, "&"))
 	}
 
-	if request.PayloadType == "params" {
+	if request.PayloadType == "params" || request.PayloadType == "formdata" {
 		boundary := "----WebKitFormBoundary7MA4YWxkTrZu0gW"
 		httpSnippet += fmt.Sprintf(`
 Content-Type: multipart/form-data; boundary=%v
