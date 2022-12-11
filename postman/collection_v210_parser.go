@@ -112,6 +112,9 @@ func (p *CollectionV210Parser) parseRequestPayloadParams(item collectionV210Item
 	}
 
 	for _, pair := range keyValuePairCollection {
+		if pair.Value == nil {
+			pair.Value = pair.Source
+		}
 		payloadParams = append(payloadParams, KeyValuePair{
 			Name:        pair.Key,
 			Key:         pair.Key,
