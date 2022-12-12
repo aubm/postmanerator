@@ -64,6 +64,7 @@ func (p *CollectionV210Parser) computeItem(parentFolder *Folder, items []collect
 				PayloadType:   item.Request.Body.Mode,
 				PayloadRaw:    item.Request.Body.Raw,
 				Tests:         p.parseRequestTests(item),
+				QueryParams:   p.parseRequestQueryParams(item),
 				PathVariables: p.parseRequestPathVariables(item),
 				PayloadParams: p.parseRequestPayloadParams(item),
 				Headers:       p.parseRequestHeaders(item, options),
@@ -98,6 +99,21 @@ func (p *CollectionV210Parser) parseRequestPathVariables(item collectionV210Item
 	}
 
 	return pathVariables
+}
+
+func (p *CollectionV210Parser) parseRequestQueryParams(item collectionV210Item) []KeyValuePair {
+	queryVariables := make([]KeyValuePair, 0)
+
+	for _, variable := range item.Request.Url.Query {
+		queryVariables = append(queryVariables, KeyValuePair{
+			Name:        variable.Key,
+			Key:         variable.Key,
+			Value:       variable.Value,
+			Description: variable.Description,
+		})
+	}
+
+	return queryVariables
 }
 
 func (p *CollectionV210Parser) parseRequestPayloadParams(item collectionV210Item) []KeyValuePair {
@@ -148,6 +164,8 @@ func (p *CollectionV210Parser) parseRequestResponses(item collectionV210Item, op
 	responses := make([]Response, 0)
 
 	for _, resp := range item.Response {
+		var req collectionV210Item
+		req.Request = resp.Request
 		responses = append(responses, Response{
 			ID:         uuid.NewV4().String(),
 			Name:       resp.Name,
@@ -155,6 +173,17 @@ func (p *CollectionV210Parser) parseRequestResponses(item collectionV210Item, op
 			Status:     resp.Status,
 			StatusCode: resp.Code,
 			Headers:    p.parseResponseHeaders(resp.Header, options),
+			Request: Request{
+				Description:   resp.Request.Description,
+				Method:        resp.Request.Method,
+				URL:           resp.Request.Url.Raw,
+				PayloadType:   resp.Request.Body.Mode,
+				PayloadRaw:    resp.Request.Body.Raw,
+				QueryParams:   p.parseRequestQueryParams(req),
+				PathVariables: p.parseRequestPathVariables(req),
+				PayloadParams: p.parseRequestPayloadParams(req),
+				Headers:       p.parseRequestHeaders(req, options),
+			},
 		})
 	}
 

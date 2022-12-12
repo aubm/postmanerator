@@ -16,6 +16,7 @@ type Request struct {
 	URL           string
 	PayloadType   string
 	PayloadRaw    string
+	QueryParams   []KeyValuePair
 	PayloadParams []KeyValuePair
 	PathVariables []KeyValuePair
 	Headers       []KeyValuePair
@@ -30,6 +31,7 @@ type Response struct {
 	StatusCode int
 	Body       string
 	Headers    []KeyValuePair
+	Request    Request
 }
 
 type Folder struct {
